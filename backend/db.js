@@ -1,21 +1,33 @@
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 
-const dbPath = path.join(__dirname, 'data', 'app.db');
+const connectionString = process.env.DATABASE_URL;
 
-const db = new sqlite3.Database(dbPath);
+if (!connectionString) {
+  throw new Error('DATABASE_URL não configurada no .env');
+}
 
-db.serialize(() => {
-  db.run(
+const pool = new Pool({
+  connectionString,
+  ssl: connectionString.includes('localhost') ? false : { rejectUnauthorized: false }
+});
+
+async function init() {
+  await pool.query(
     `CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id BIGSERIAL PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       phone TEXT,
       password_hash TEXT NOT NULL,
-      created_at TEXT NOT NULL
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )`
   );
+}
+
+init().catch((err) => {
+  console.error('Erro ao inicializar o banco:', err);
 });
 
-module.exports = db;
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
