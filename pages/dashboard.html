@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard - Plataforma de Investimento</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <header class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
+        <nav class="text-sm space-x-4">
+          <a class="text-gray-700 hover:text-gray-900" href="../index.html">Início</a>
+          <a class="text-gray-700 hover:text-gray-900" href="dashboard.html">Dashboard</a>
+          <a class="text-gray-700 hover:text-gray-900" href="login.html" id="logout-link">Sair</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="flex">
+      <aside class="w-64 bg-white border-r border-gray-200 min-h-screen">
+        <div class="p-6">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</p>
+        </div>
+        <nav class="px-2 space-y-1">
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md bg-blue-100 text-blue-900" href="dashboard.html">🏠 Dashboard</a>
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="products.html">📊 Produtos</a>
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="investments.html">💼 Investimentos</a>
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="transactions.html">🧾 Transações</a>
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="referrals.html">🤝 Referrals</a>
+          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="profile.html">⚙ Perfil</a>
+        </nav>
+      </aside>
+
+      <main class="flex-1 p-6 space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Olá, <span id="user-name">investidor(a)</span>! 👋</h2>
+          <p class="mt-1 text-sm text-gray-500">Aqui está um resumo da sua carteira de investimentos.</p>
+        </div>
+
+        <section class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 p-3 rounded-lg bg-green-100">R$</div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Saldo Disponível</p>
+                <p class="text-lg font-semibold text-gray-900">R$ 12.500,00</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 p-3 rounded-lg bg-blue-100">📊</div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Total Investido</p>
+                <p class="text-lg font-semibold text-gray-900">R$ 48.000,00</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 p-3 rounded-lg bg-purple-100">↗</div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Rendimentos</p>
+                <p class="text-lg font-semibold text-gray-900">R$ 2.450,00</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 p-3 rounded-lg bg-orange-100">👥</div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500">Comissões</p>
+                <p class="text-lg font-semibold text-gray-900">R$ 320,00</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Investimentos Recentes</h3>
+              <p class="mt-1 text-sm text-gray-500">Seus últimos investimentos</p>
+            </div>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p class="font-medium text-gray-900">CDB Banco Alpha</p>
+                  <p class="text-sm text-gray-500">CDB</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-medium text-gray-900">R$ 5.000,00</p>
+                  <p class="text-sm text-gray-500">110% do CDI</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p class="font-medium text-gray-900">LCI Banco Solar</p>
+                  <p class="text-sm text-gray-500">LCI</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-medium text-gray-900">R$ 8.000,00</p>
+                  <p class="text-sm text-gray-500">9,5% a.a.</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p class="font-medium text-gray-900">Tesouro Selic 2029</p>
+                  <p class="text-sm text-gray-500">Tesouro Direto</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-medium text-gray-900">R$ 3.500,00</p>
+                  <p class="text-sm text-gray-500">SELIC + 0,12%</p>
+                </div>
+              </div>
+              <div class="pt-4">
+                <a href="investments.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">Ver todos os investimentos →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Programa de Referrals</h3>
+              <p class="mt-1 text-sm text-gray-500">Seus ganhos com indicações</p>
+            </div>
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                  <p class="text-2xl font-bold text-gray-900">12</p>
+                  <p class="text-sm text-gray-500">Indicações</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                  <p class="text-2xl font-bold text-gray-900">R$ 320,00</p>
+                  <p class="text-sm text-gray-500">Comissões</p>
+                </div>
+              </div>
+              <div class="pt-4">
+                <a href="referrals.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">Gerenciar referrals →</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Ações Rápidas</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors" href="products.html">
+              <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">📊</div>
+              <div class="ml-3">
+                <p class="font-medium text-blue-900">Investir</p>
+                <p class="text-sm text-blue-600">Ver produtos</p>
+              </div>
+            </a>
+            <a class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors" href="transactions.html">
+              <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">R$</div>
+              <div class="ml-3">
+                <p class="font-medium text-green-900">Depositar</p>
+                <p class="text-sm text-green-600">Adicionar saldo</p>
+              </div>
+            </a>
+            <a class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors" href="referrals.html">
+              <div class="flex-shrink-0 p-2 bg-purple-100 rounded-lg">👥</div>
+              <div class="ml-3">
+                <p class="font-medium text-purple-900">Indicar</p>
+                <p class="text-sm text-purple-600">Ganhar comissão</p>
+              </div>
+            </a>
+            <a class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" href="profile.html">
+              <div class="flex-shrink-0 p-2 bg-gray-100 rounded-lg">⚙</div>
+              <div class="ml-3">
+                <p class="font-medium text-gray-900">Perfil</p>
+                <p class="text-sm text-gray-600">Configurações</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../assets/session.js"></script>
+  </body>
+</html>
