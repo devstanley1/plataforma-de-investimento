@@ -13,6 +13,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 app.use(cors({ origin: '*'}));
 app.use(express.json());
 
+app.get('/api/health', async (req, res) => {
+  try {
+    await db.query('SELECT 1');
+    return res.json({ status: 'ok' });
+  } catch (err) {
+    return res.status(500).json({ status: 'error', message: 'Banco indisponível.' });
+  }
+});
+
 function createToken(user) {
   return jwt.sign(
     { id: user.id, email: user.email, name: user.name },
