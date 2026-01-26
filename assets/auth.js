@@ -1,4 +1,7 @@
-const API_BASE = 'http://localhost:3001';
+function getSupabaseClient() {
+  if (window.supabaseClient) return window.supabaseClient;
+  throw new Error('Supabase não configurado.');
+}
 
 function setError(message) {
   const el = document.getElementById('form-error');
@@ -16,19 +19,17 @@ async function handleLogin(event) {
   const password = form.querySelector('[name="password"]').value;
 
   try {
-    const res = await fetch(`${API_BASE}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Erro ao fazer login');
+    if (error || !data?.user) {
+      throw new Error('Credenciais inválidas.');
     }
 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userName', data.user?.name || '');
+    localStorage.setItem('userName', data.user.user_metadata?.name || '');
     window.location.href = 'dashboard.html';
   } catch (err) {
     setError(err.message || 'Erro ao fazer login');
@@ -52,19 +53,28 @@ async function handleRegister(event) {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/api/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password })
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          phone: phone || null
+        }
+      }
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Erro ao criar conta');
+    if (error) {
+      throw new Error(error.message || 'Erro ao criar conta');
     }
 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userName', data.user?.name || '');
+    if (!data?.session) {
+      setError('Conta criada. Verifique seu email para confirmar o acesso.');
+      return;
+    }
+
+    localStorage.setItem('userName', data.user?.user_metadata?.name || '');
     window.location.href = 'dashboard.html';
   } catch (err) {
     setError(err.message || 'Erro ao criar conta');

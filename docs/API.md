@@ -1,13 +1,10 @@
 # Documentação da API
 
 ## 🔗 Base URL
-```
-http://localhost:3001
-```
+As funções ficam em `/api` (Vercel Functions).
 
 ## 🔐 Autenticação
-
-A API usa JWT (JSON Web Tokens) para autenticação. Inclua o token no header:
+Autenticação é gerida pelo Supabase Auth. Use o `access_token` retornado pelo Supabase no header:
 
 ```
 Authorization: Bearer <access_token>
@@ -15,38 +12,41 @@ Authorization: Bearer <access_token>
 
 ## 📚 Endpoints
 
-### Autenticação
+### GET /api/health
+Verifica se a API está ativa.
 
-#### POST /auth/register
-Registrar novo usuário
+**Response:**
+```json
+{ "status": "ok" }
+```
+
+### POST /api/register
+Cria uma conta via Supabase Auth.
 
 **Body:**
 ```json
 {
+  "name": "João Silva",
   "email": "user@example.com",
   "password": "password123",
-  "name": "João Silva",
-  "phone": "+5511999999999",
-  "referralCode": "REF123"
+  "phone": "+5511999999999"
 }
 ```
 
 **Response:**
 ```json
 {
+  "token": "access_token_ou_null",
   "user": {
     "id": "uuid",
-    "email": "user@example.com",
     "name": "João Silva",
-    "kycStatus": "PENDING"
-  },
-  "accessToken": "jwt_token",
-  "refreshToken": "refresh_token"
+    "email": "user@example.com"
+  }
 }
 ```
 
-#### POST /auth/login
-Fazer login
+### POST /api/login
+Autentica um usuário via Supabase Auth.
 
 **Body:**
 ```json
@@ -56,147 +56,36 @@ Fazer login
 }
 ```
 
-#### POST /auth/refresh
-Renovar token de acesso
-
-**Body:**
-```json
-{
-  "refreshToken": "refresh_token"
-}
-```
-
-### Usuários
-
-#### GET /users/me
-Obter perfil do usuário atual
-
 **Response:**
 ```json
 {
-  "id": "uuid",
-  "email": "user@example.com",
-  "name": "João Silva",
-  "phone": "+5511999999999",
-  "isEmailVerified": true,
-  "kycStatus": "VERIFIED",
-  "wallet": {
-    "balance": 10000.00,
-    "currency": "BRL"
-  }
-}
-```
-
-#### PATCH /users/me
-Atualizar perfil
-
-**Body:**
-```json
-{
-  "name": "João Silva Santos",
-  "phone": "+5511888888888"
-}
-```
-
-#### POST /users/kyc/verify
-Submeter verificação KYC
-
-**Body:**
-```json
-{
-  "documentNumber": "12345678901",
-  "fullName": "João Silva",
-  "birthDate": "1990-01-01",
-  "email": "user@example.com",
-  "phone": "+5511999999999",
-  "address": "Rua das Flores, 123",
-  "city": "São Paulo",
-  "state": "SP",
-  "zipCode": "01234567"
-}
-```
-
-### Produtos
-
-#### GET /products
-Listar produtos de investimento
-
-**Query Parameters:**
-- `status` (opcional): ACTIVE, INACTIVE, SUSPENDED
-
-**Response:**
-```json
-[
-  {
+  "token": "access_token_ou_null",
+  "user": {
     "id": "uuid",
-    "name": "CDB Banco XYZ",
-    "type": "CDB",
-    "description": "CDB com rendimento de 12% ao ano",
-    "nominalRate": 0.12,
-    "currency": "BRL",
-    "minInvestment": 1000.00,
-    "maturityDays": 365,
-    "status": "ACTIVE"
+    "name": "João Silva",
+    "email": "user@example.com"
   }
-]
+}
 ```
 
-#### GET /products/:id
-Obter produto específico
+### GET /api/me
+Retorna os dados do usuário autenticado.
 
-#### GET /products/:id/calculate-yield
-Calcular rendimento
-
-**Query Parameters:**
-- `amount`: Valor do investimento
-- `days` (opcional): Período em dias
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
 
 **Response:**
 ```json
 {
-  "product": {
+  "user": {
     "id": "uuid",
-    "name": "CDB Banco XYZ",
-    "type": "CDB",
-    "nominalRate": 0.12
-  },
-  "investment": {
-    "amount": 10000,
-    "days": 365
-  },
-  "yield": {
-    "grossYield": 1200.00,
-    "taxAmount": 270.00,
-    "netYield": 930.00,
-    "totalAmount": 10930.00,
-    "taxRate": 0.225,
-    "dailyRate": 0.000329,
-    "annualRate": 0.12
+    "name": "João Silva",
+    "email": "user@example.com"
   }
 }
 ```
-
-### Investimentos
-
-#### POST /investments
-Criar novo investimento
-
-**Body:**
-```json
-{
-  "productId": "uuid",
-  "amount": 10000.00
-}
-```
-
-#### GET /investments
-Listar investimentos do usuário
-
-**Query Parameters:**
-- `status` (opcional): ACTIVE, MATURED, CANCELLED
-
-#### GET /investments/:id
-Obter investimento específico
 
 #### GET /investments/portfolio/summary
 Obter resumo da carteira

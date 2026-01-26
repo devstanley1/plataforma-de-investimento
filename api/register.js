@@ -1,4 +1,5 @@
-const { bcrypt, createToken, db, handleCors, readJsonBody, sendJson } = require('./_utils');
+const { supabase } = require('./_supabase');
+const { handleCors, readJsonBody, sendJson } = require('./_utils');
 
 module.exports = async (req, res) => {
   if (handleCors(req, res)) return;
@@ -17,20 +18,35 @@ module.exports = async (req, res) => {
     return sendJson(res, 400, { message: 'Senha deve ter pelo menos 6 caracteres.' });
   }
 
-  const passwordHash = bcrypt.hashSync(password, 10);
+  if (!supabase) {
+    return sendJson(res, 500, { message: 'Supabase não configurado.' });
+  }
 
-  try {
-    const result = await db.query(
-      'INSERT INTO users (name, email, phone, password_hash) VALUES ($1, $2, $3, $4) RETURNING id, name, email',
-      [name, String(email).toLowerCase(), phone || null, passwordHash]
-    );
-    const user = result.rows[0];
-    const token = createToken(user);
-    return sendJson(res, 201, { token, user });
-  } catch (err) {
-    if (err && err.code === '23505') {
+  const { data, error } = await supabase.auth.signUp({
+    email: String(email).toLowerCase(),
+    password: String(password),
+    options: {
+      data: {
+        name: String(name).trim(),
+        phone: phone ? String(phone).trim() : null
+      }
+    }
+  });
+
+  if (error) {
+    if (String(error.message || '').toLowerCase().includes('already')) {
       return sendJson(res, 409, { message: 'Email já cadastrado.' });
     }
     return sendJson(res, 500, { message: 'Erro ao criar conta.' });
   }
+
+  const user = data.user
+    ? {
+        id: data.user.id,
+        name: data.user.user_metadata?.name || null,
+        email: data.user.email
+      }
+    : null;
+
+  return sendJson(res, 201, { token: data.session?.access_token || null, user });
 };

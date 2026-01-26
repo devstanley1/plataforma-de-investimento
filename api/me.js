@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
+const { supabase } = require('./_supabase');
 const { handleCors, sendJson } = require('./_utils');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 
 module.exports = async (req, res) => {
   if (handleCors(req, res)) return;
@@ -17,10 +15,20 @@ module.exports = async (req, res) => {
     return sendJson(res, 401, { message: 'Token ausente.' });
   }
 
-  try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    return sendJson(res, 200, { user: payload });
-  } catch (e) {
+  if (!supabase) {
+    return sendJson(res, 500, { message: 'Supabase não configurado.' });
+  }
+
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data?.user) {
     return sendJson(res, 401, { message: 'Token inválido.' });
   }
+
+  const user = {
+    id: data.user.id,
+    name: data.user.user_metadata?.name || null,
+    email: data.user.email
+  };
+
+  return sendJson(res, 200, { user });
 };

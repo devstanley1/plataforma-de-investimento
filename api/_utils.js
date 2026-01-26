@@ -1,17 +1,3 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const db = require('../backend/db');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
-
-function createToken(user) {
-  return jwt.sign(
-    { id: user.id, email: user.email, name: user.name },
-    JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-}
-
 function sendJson(res, status, payload) {
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -50,9 +36,6 @@ async function readJsonBody(req) {
 }
 
 module.exports = {
-  bcrypt,
-  db,
-  createToken,
   handleCors,
   readJsonBody,
   sendJson,

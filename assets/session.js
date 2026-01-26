@@ -1,29 +1,31 @@
-const API_BASE = 'http://localhost:3001';
+function getSupabaseClient() {
+  if (window.supabaseClient) return window.supabaseClient;
+  throw new Error('Supabase não configurado.');
+}
 
 async function loadSession() {
-  const token = localStorage.getItem('token');
-  if (!token) {
+  const supabase = getSupabaseClient();
+  const { data: sessionData } = await supabase.auth.getSession();
+  const session = sessionData?.session;
+
+  if (!session) {
     window.location.href = 'login.html';
     return;
   }
 
   try {
-    const res = await fetch(`${API_BASE}/api/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!res.ok) {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
       throw new Error('Sessão inválida');
     }
 
-    const data = await res.json();
-    const name = data.user?.name || localStorage.getItem('userName') || 'Usuário';
+    const name = data.user.user_metadata?.name || localStorage.getItem('userName') || 'Usuário';
     const el = document.getElementById('user-name');
     if (el) {
       el.textContent = name;
     }
   } catch (e) {
-    localStorage.removeItem('token');
+    await supabase.auth.signOut();
     window.location.href = 'login.html';
   }
 }
@@ -33,9 +35,11 @@ function setupLogout() {
   if (!logout) return;
   logout.addEventListener('click', (e) => {
     e.preventDefault();
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    window.location.href = 'login.html';
+    const supabase = getSupabaseClient();
+    supabase.auth.signOut().finally(() => {
+      localStorage.removeItem('userName');
+      window.location.href = 'login.html';
+    });
   });
 }
 

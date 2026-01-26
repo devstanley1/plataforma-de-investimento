@@ -1,4 +1,5 @@
-const { db, handleCors, sendJson } = require('./_utils');
+const { supabase, SUPABASE_ANON_KEY, SUPABASE_URL } = require('./_supabase');
+const { handleCors, sendJson } = require('./_utils');
 
 module.exports = async (req, res) => {
   if (handleCors(req, res)) return;
@@ -7,10 +8,13 @@ module.exports = async (req, res) => {
     return sendJson(res, 405, { message: 'Método não permitido.' });
   }
 
-  try {
-    await db.query('SELECT 1');
-    return sendJson(res, 200, { status: 'ok' });
-  } catch (err) {
-    return sendJson(res, 500, { status: 'error', message: 'Banco indisponível.' });
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return sendJson(res, 500, { status: 'error', message: 'Supabase não configurado.' });
   }
+
+  if (!supabase) {
+    return sendJson(res, 500, { status: 'error', message: 'Cliente Supabase indisponível.' });
+  }
+
+  return sendJson(res, 200, { status: 'ok' });
 };

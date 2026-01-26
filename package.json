@@ -1,0 +1,8 @@
+{
+  "name": "plataforma-de-investimento",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1"
+  }
+}

@@ -5,7 +5,6 @@ erDiagram
     Users {
         string id PK
         string email UK
-        string password_hash
         string name
         string phone
         boolean is_email_verified
@@ -135,7 +134,7 @@ erDiagram
 ### Users
 - **id**: Identificador único do usuário (UUID)
 - **email**: Email único do usuário
-- **password_hash**: Senha criptografada com bcrypt
+- **password_hash**: Gerenciado pelo Supabase Auth (não usado neste schema)
 - **name**: Nome completo do usuário
 - **phone**: Telefone (opcional)
 - **is_email_verified**: Status de verificação do email
