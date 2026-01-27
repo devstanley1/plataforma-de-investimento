@@ -1,0 +1,70 @@
+const { handleCors, readJsonBody, sendJson } = require('../../_utils');
+
+module.exports = async (req, res) => {
+  if (handleCors(req, res)) return;
+
+  if (req.method !== 'POST') {
+    return sendJson(res, 405, { message: 'Método não permitido.' });
+  }
+
+  const publicKey = process.env.VIZZION_PUBLIC_KEY;
+  const secretKey = process.env.VIZZION_SECRET_KEY;
+  const callbackUrl = process.env.VIZZION_WEBHOOK_URL;
+
+  if (!publicKey || !secretKey) {
+    return sendJson(res, 500, { message: 'Vizzion Pay não configurada.' });
+  }
+
+  const body = await readJsonBody(req);
+  const amount = Number(body.amount || 0);
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return sendJson(res, 400, { message: 'Valor inválido.' });
+  }
+
+  if (!body?.client?.name || !body?.client?.phone) {
+    return sendJson(res, 400, { message: 'Nome e telefone são obrigatórios.' });
+  }
+
+  const identifier = body.identifier || `PIX-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase();
+
+  const payload = {
+    identifier,
+    amount,
+    client: {
+      name: body.client.name,
+      phone: body.client.phone,
+      email: body.client.email || null,
+      cpf: body.client.cpf || null
+    },
+    metadata: body.metadata || { source: 'site' },
+  };
+
+  if (callbackUrl) {
+    payload.callbackUrl = callbackUrl;
+  }
+
+  try {
+    const response = await fetch('https://app.vizzionpay.com/api/v1/gateway/pix/receive', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-public-key': publicKey,
+        'x-secret-key': secretKey
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return sendJson(res, response.status, {
+        message: data?.message || 'Erro ao criar cobrança PIX.'
+      });
+    }
+
+    return sendJson(res, 201, data);
+  } catch (error) {
+    return sendJson(res, 500, { message: 'Falha ao comunicar com a Vizzion Pay.' });
+  }
+};

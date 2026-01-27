@@ -18,6 +18,16 @@ function generateReferralCode() {
   return `CONV-${part}`;
 }
 
+function normalizePhone(phone) {
+  return String(phone || '').replace(/\D/g, '');
+}
+
+function phoneToEmail(phone) {
+  const digits = normalizePhone(phone);
+  if (!digits) return null;
+  return `phone_${digits}@netflixinvest.local`;
+}
+
 async function handleLogin(event) {
   event.preventDefault();
   setError('');
@@ -39,7 +49,13 @@ async function handleLogin(event) {
     if (emailInput) {
       credentials.email = emailInput;
     } else if (phoneInput) {
-      credentials.phone = phoneInput;
+      const emailAlias = phoneToEmail(phoneInput);
+      if (!emailAlias) {
+        throw new Error('Informe um telefone válido.');
+      }
+      credentials.email = emailAlias;
+    } else {
+      throw new Error('Informe seu telefone.');
     }
 
     const { data, error } = await supabase.auth.signInWithPassword(credentials);
@@ -64,41 +80,38 @@ async function handleRegister(event) {
   setError('');
 
   const form = event.currentTarget;
-  const name = form.querySelector('[name="name"]').value.trim();
-  const email = form.querySelector('[name="email"]').value.trim().toLowerCase();
   const phone = form.querySelector('[name="phone"]').value.trim();
   const password = form.querySelector('[name="password"]').value;
   const confirm = form.querySelector('[name="confirmPassword"]').value;
-  const withdrawPassword = form.querySelector('[name="withdrawPassword"]').value;
-  const confirmWithdrawPassword = form.querySelector('[name="confirmWithdrawPassword"]').value;
+  const referralCodeInput = form.querySelector('[name="referralCode"]')?.value.trim();
   const referralCode = generateReferralCode();
+
+  if (!phone) {
+    setError('Informe seu telefone.');
+    return;
+  }
+
+  const phoneEmail = phoneToEmail(phone);
+  if (!phoneEmail) {
+    setError('Informe um telefone válido.');
+    return;
+  }
 
   if (password !== confirm) {
     setError('As senhas não coincidem.');
     return;
   }
 
-  if (!withdrawPassword) {
-    setError('Informe a senha de saque.');
-    return;
-  }
-
-  if (withdrawPassword !== confirmWithdrawPassword) {
-    setError('As senhas de saque não coincidem.');
-    return;
-  }
-
   try {
     const supabase = await getSupabaseClient();
     const { data, error } = await supabase.auth.signUp({
-      email,
+      email: phoneEmail,
       password,
       options: {
         data: {
-          name,
           phone: phone || null,
           referral_code: referralCode,
-          withdraw_password: withdrawPassword
+          referral_code_used: referralCodeInput || null
         }
       }
     });
