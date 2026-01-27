@@ -8,32 +8,17 @@
   </head>
   <body class="min-h-screen bg-gray-50">
     <header class="bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="site-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
-        <nav class="text-sm space-x-4">
-          <a class="text-gray-700 hover:text-gray-900" href="../index.html">Início</a>
+        <nav class="site-nav text-sm">
           <a class="text-gray-700 hover:text-gray-900" href="dashboard.html">Dashboard</a>
           <a class="text-gray-700 hover:text-gray-900" href="login.html">Sair</a>
         </nav>
       </div>
     </header>
 
-    <div class="flex">
-      <aside class="w-64 bg-white border-r border-gray-200 min-h-screen">
-        <div class="p-6">
-          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</p>
-        </div>
-        <nav class="px-2 space-y-1">
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="dashboard.html">🏠 Dashboard</a>
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="products.html">📊 Produtos</a>
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="investments.html">💼 Investimentos</a>
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md bg-blue-100 text-blue-900" href="transactions.html">🧾 Transações</a>
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="referrals.html">🤝 Referrals</a>
-          <a class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="profile.html">⚙ Perfil</a>
-        </nav>
-      </aside>
-
-      <main class="flex-1 p-6">
+    <div class="page-shell">
+      <main class="page-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h2 class="text-2xl font-bold text-gray-900">Transações</h2>
           <p class="mt-2 text-gray-600">Histórico de depósitos, saques e aplicações.</p>
@@ -53,5 +38,13 @@
         </div>
       </main>
     </div>
+    <nav class="bottom-nav" aria-label="Menu principal">
+      <a class="bottom-nav-link" href="dashboard.html">🏠<span>Dashboard</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
+      <a class="bottom-nav-link" href="investments.html">💼<span>Investimentos</span></a>
+      <a class="bottom-nav-link is-active" href="transactions.html">🧾<span>Transações</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Referrals</span></a>
+      <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
+    </nav>
   </body>
 </html>
