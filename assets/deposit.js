@@ -68,18 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const cpfDigits = normalizeCpf(cpfInput?.value || '');
-    if (cpfDigits && cpfDigits.length !== 11) {
+    if (!cpfDigits || cpfDigits.length !== 11) {
       setError('Informe um CPF válido com 11 dígitos.');
       return;
     }
 
     const payload = {
       amount,
+      document: cpfDigits,
+      cpf: cpfDigits,
+      documentType: 'CPF',
+      documentNumber: cpfDigits,
       client: {
         name: userMeta.name || 'Investidor Netflix',
         phone: userMeta.phone || '+55 00 00000-0000',
         email: userEmail || null,
-        cpf: cpfDigits || null
+        cpf: cpfDigits
       },
       metadata: { source: 'site' }
     };

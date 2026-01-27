@@ -70,7 +70,8 @@ module.exports = async (req, res) => {
 
     if (!response.ok) {
       return sendJson(res, response.status, {
-        message: data?.message || 'Erro ao solicitar retirada.'
+        message: data?.message || 'Erro ao solicitar retirada.',
+        details: data || null
       });
     }
 

@@ -26,16 +26,28 @@ module.exports = async (req, res) => {
     return sendJson(res, 400, { message: 'Nome e telefone são obrigatórios.' });
   }
 
+  const document = String(body.document || body.cpf || body?.client?.cpf || '').replace(/\D/g, '');
+  if (!document || document.length !== 11) {
+    return sendJson(res, 400, { message: 'Documento (CPF) obrigatório.' });
+  }
+
   const identifier = body.identifier || `PIX-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase();
 
   const payload = {
     identifier,
     amount,
+    document,
+    cpf: document,
+    documentType: 'CPF',
+    documentNumber: document,
     client: {
       name: body.client.name,
       phone: body.client.phone,
       email: body.client.email || null,
-      cpf: body.client.cpf || null
+      cpf: document,
+      document,
+      documentType: 'CPF',
+      documentNumber: document
     },
     metadata: body.metadata || { source: 'site' },
   };
@@ -59,7 +71,8 @@ module.exports = async (req, res) => {
 
     if (!response.ok) {
       return sendJson(res, response.status, {
-        message: data?.message || 'Erro ao criar cobrança PIX.'
+        message: data?.message || 'Erro ao criar cobrança PIX.',
+        details: data || null
       });
     }
 
