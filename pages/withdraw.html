@@ -51,10 +51,11 @@
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <form id="withdraw-form" class="space-y-4">
               <p id="withdraw-error" class="text-sm text-red-600" style="display:none;"></p>
+              <p id="withdraw-success" class="text-sm text-green-600" style="display:none;"></p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Valor da retirada (R$)</label>
-                  <input type="number" min="1" step="0.01" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0,00" />
+                  <input id="withdraw-amount-input" type="number" min="1" step="0.01" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0,00" />
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de documento</label>
@@ -68,14 +69,14 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Senha de retirada</label>
-                  <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
+                  <input id="withdraw-password" type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
                 </div>
               </div>
               <div class="mt-4">
                 <button type="submit" class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar retirada</button>
               </div>
               <div class="mt-4 bg-gray-50 rounded-lg p-4 text-sm text-gray-600" aria-live="polite">
-                <p>Valor solicitado: <strong id="withdraw-amount">R$ 0,00</strong></p>
+                <p>Valor solicitado: <strong id="withdraw-amount-display">R$ 0,00</strong></p>
                 <p>Taxa de processamento (7%): <strong id="withdraw-fee">R$ 0,00</strong></p>
                 <p>Valor a receber: <strong id="withdraw-net">R$ 0,00</strong></p>
               </div>
@@ -117,52 +118,7 @@
         if (secondCheck === 10) secondCheck = 0;
         return secondCheck === Number(cpf[10]);
       }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('withdraw-form');
-        const cpfInput = document.getElementById('cpf');
-        const errorEl = document.getElementById('withdraw-error');
-        const amountInput = form?.querySelector('input[type="number"]');
-        const amountEl = document.getElementById('withdraw-amount');
-        const feeEl = document.getElementById('withdraw-fee');
-        const netEl = document.getElementById('withdraw-net');
-
-        if (!form || !cpfInput || !errorEl) return;
-
-        const formatCurrency = (value) =>
-          new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
-
-        const updateSummary = () => {
-          const rawValue = Number(amountInput?.value || 0);
-          const amount = Number.isFinite(rawValue) && rawValue > 0 ? rawValue : 0;
-          const fee = amount * 0.07;
-          const net = amount - fee;
-          if (amountEl) amountEl.textContent = formatCurrency(amount);
-          if (feeEl) feeEl.textContent = formatCurrency(fee);
-          if (netEl) netEl.textContent = formatCurrency(net);
-        };
-
-        const setError = (message) => {
-          errorEl.textContent = message || '';
-          errorEl.style.display = message ? 'block' : 'none';
-        };
-
-        cpfInput.addEventListener('blur', () => {
-          if (!cpfInput.value) return;
-          setError(isValidCpf(cpfInput.value) ? '' : 'CPF inválido. Verifique e tente novamente.');
-        });
-
-        amountInput?.addEventListener('input', updateSummary);
-        updateSummary();
-
-        form.addEventListener('submit', (event) => {
-          if (!isValidCpf(cpfInput.value)) {
-            event.preventDefault();
-            setError('CPF inválido. Verifique e tente novamente.');
-            cpfInput.focus();
-          }
-        });
-      });
     </script>
+    <script src="../assets/withdraw.js"></script>
   </body>
 </html>
