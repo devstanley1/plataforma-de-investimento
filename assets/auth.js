@@ -42,7 +42,7 @@ async function handleLogin(event) {
     }
 
     localStorage.setItem('userName', data.user.user_metadata?.name || '');
-    window.location.href = 'dashboard.html';
+    window.location.href = 'products.html';
   } catch (err) {
     setError(err.message || 'Erro ao fazer login');
   }
@@ -107,7 +107,7 @@ async function handleRegister(event) {
 
     localStorage.setItem('userName', data.user?.user_metadata?.name || '');
     localStorage.setItem('referralCode', referralCode);
-    window.location.href = 'dashboard.html';
+    window.location.href = 'products.html';
   } catch (err) {
     setError(err.message || 'Erro ao criar conta');
   }
