@@ -22,8 +22,9 @@ async function loadSession() {
       throw new Error('Sessão inválida');
     }
 
-    const name = data.user.user_metadata?.name || localStorage.getItem('userName') || 'Usuário';
     const email = data.user.email || '';
+    const fallbackName = email ? email.split('@')[0] : 'Usuário';
+    const name = data.user.user_metadata?.name || localStorage.getItem('userName') || fallbackName;
     const el = document.getElementById('user-name');
     if (el) {
       el.textContent = name;
