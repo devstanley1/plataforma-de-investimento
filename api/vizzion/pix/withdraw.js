@@ -40,13 +40,17 @@ module.exports = async (req, res) => {
     identifier,
     amount,
     document,
+    cpf: document,
     pixKey,
     pixKeyType,
     client: {
       name: body?.client?.name || 'Investidor Netflix',
       phone: body?.client?.phone || '+55 00 00000-0000',
       email: body?.client?.email || null,
-      cpf: document
+      cpf: document,
+      document,
+      documentNumber: document,
+      documentType: 'CPF'
     },
     metadata: body.metadata || { source: 'site' }
   };
