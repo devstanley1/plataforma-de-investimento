@@ -141,10 +141,11 @@ a {
   box-shadow: inset 0 0 0 1px rgba(229, 9, 20, 0.4);
 }
 .product-image {
-  height: 180px;
+  height: 200px;
   border-radius: 0.75rem;
   background: linear-gradient(135deg, #2a2a2a 0%, #0f0f0f 65%);
   border: 1px solid var(--netflix-border);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,6 +153,28 @@ a {
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.banner-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 0.85rem;
+  border: 1px solid var(--netflix-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 .site-header {
   flex-wrap: wrap;
@@ -373,6 +396,7 @@ a {
   .md\:max-w-3xl { max-width: 48rem; }
   .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
   .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
+  .banner-image { height: 260px; }
 }
 
 @media (min-width: 1024px) {
@@ -380,4 +404,6 @@ a {
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .banner-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .banner-image { height: 260px; }
 }
