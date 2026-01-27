@@ -40,33 +40,9 @@ module.exports = async (req, res) => {
 
   if (supabase && isPaid) {
     const metadata = payload?.metadata || payload?.data?.metadata || payload?.pix?.metadata || {};
-    let userId = metadata?.userId || metadata?.user_id || payload?.userId || payload?.user_id || null;
+    const userId = metadata?.userId || metadata?.user_id || payload?.userId || payload?.user_id || null;
     const amount = Number(payload?.data?.amount || payload?.amount || payload?.data?.value || 0);
-    const referenceCandidates = [
-      payload?.data?.reference,
-      payload?.data?.id,
-      payload?.id,
-      payload?.payment?.id,
-      payload?.payment?.reference,
-      payload?.pix?.id,
-      payload?.pix?.reference,
-      payload?.identifier
-    ].filter(Boolean);
-
-    if (!userId && referenceCandidates.length) {
-      try {
-        const { data: paymentRow } = await supabase
-          .from('payments')
-          .select('user_id,gateway_reference')
-          .in('gateway_reference', referenceCandidates)
-          .maybeSingle();
-        userId = paymentRow?.user_id || null;
-      } catch {
-        userId = null;
-      }
-    }
-
-    const reference = referenceCandidates[0] || null;
+    const reference = payload?.data?.id || payload?.id || payload?.payment?.id || payload?.data?.reference || null;
 
     if (userId && Number.isFinite(amount) && amount > 0) {
       try {
@@ -102,21 +78,14 @@ module.exports = async (req, res) => {
           }
         }
 
-        if (reference) {
-          await supabase
-            .from('payments')
-            .update({ status: 'COMPLETED' })
-            .eq('gateway_reference', reference);
-        } else {
-          await supabase.from('payments').insert({
-            user_id: userId,
-            amount,
-            currency: 'BRL',
-            status: 'COMPLETED',
-            gateway_reference: reference,
-            payment_method: 'PIX'
-          });
-        }
+        await supabase.from('payments').insert({
+          user_id: userId,
+          amount,
+          currency: 'BRL',
+          status: 'COMPLETED',
+          gateway_reference: reference,
+          payment_method: 'PIX'
+        });
 
         await supabase.from('transactions').insert({
           user_id: userId,

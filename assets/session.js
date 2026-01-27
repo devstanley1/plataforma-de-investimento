@@ -23,7 +23,6 @@ async function loadSession() {
     }
 
     await syncWalletBalance(supabase, data.user.id);
-    startWalletPolling(supabase, data.user.id);
 
     const email = data.user.email || '';
     const fallbackName = email ? email.split('@')[0] : 'Usuário';
@@ -58,31 +57,9 @@ async function syncWalletBalance(supabase, userId) {
 
     const balance = Number(data?.balance || 0);
     localStorage.setItem('userBalance', String(balance));
-    updateBalanceUI(balance);
   } catch {
     return;
   }
-}
-
-function updateBalanceUI(balance) {
-  const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-  const formatted = formatter.format(balance || 0);
-  const elements = [
-    document.getElementById('available-balance'),
-    document.getElementById('user-balance')
-  ].filter(Boolean);
-
-  elements.forEach((el) => {
-    el.textContent = formatted;
-  });
-}
-
-function startWalletPolling(supabase, userId) {
-  const intervalMs = 15000;
-  if (window.__walletPolling) return;
-  window.__walletPolling = setInterval(() => {
-    syncWalletBalance(supabase, userId);
-  }, intervalMs);
 }
 
 function setupLogout() {

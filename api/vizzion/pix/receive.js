@@ -76,35 +76,8 @@ module.exports = async (req, res) => {
       });
     }
 
-    if (supabase) {
-      const metadata = payload?.metadata || {};
-      const userId = metadata?.userId || metadata?.user_id || null;
-      if (userId) {
-        await supabase.from('payments').insert({
-          user_id: userId,
-          amount,
-          currency: 'BRL',
-          status: 'PENDING',
-          gateway_reference: identifier,
-          payment_method: 'PIX'
-        });
-
-        await supabase.from('transactions').insert({
-          user_id: userId,
-          type: 'DEPOSIT',
-          amount,
-          currency: 'BRL',
-          status: 'PENDING',
-          description: 'Depósito PIX criado'
-        });
-      }
-    }
-
     return sendJson(res, 201, data);
   } catch (error) {
-    return sendJson(res, 500, {
-      message: 'Falha ao comunicar com a Vizzion Pay.',
-      details: error?.message || 'Erro de rede'
-    });
+    return sendJson(res, 500, { message: 'Falha ao comunicar com a Vizzion Pay.' });
   }
 };
