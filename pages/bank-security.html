@@ -14,12 +14,28 @@
         </h1>
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
-          <a class="top-action" href="#">Grupo</a>
+          <button class="top-action group-button" type="button">Grupo</button>
           <a class="top-action auth-only" href="deposit.html">Recargas</a>
           <a class="top-action auth-only" href="withdraw.html">Retiradas</a>
         </nav>
       </div>
     </header>
+
+    <div id="group-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="group-modal-title">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card">
+        <h2 id="group-modal-title" class="modal-title">Bem-vindo à Netflix Investimento</h2>
+        <p class="modal-text">
+          Somos uma empresa dedicada a oferecer uma experiência de investimento em títulos Netflix com segurança,
+          transparência e retorno diário. Nossa missão é conectar você aos melhores filmes e séries licenciados,
+          com acompanhamento em tempo real e suporte especializado.
+        </p>
+        <div class="modal-actions">
+          <a class="modal-primary" href="#">Acessar grupo</a>
+          <button class="modal-secondary" type="button" data-close-modal>Fechar</button>
+        </div>
+      </div>
+    </div>
 
     <section class="banner-grid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <img class="banner-image" src="../assets/img/banner%201.jpeg" alt="Banner Netflix 1" loading="lazy" />
@@ -130,5 +146,6 @@
     <script src="../assets/supabase.js"></script>
     <script src="../assets/session.js"></script>
     <script src="../assets/bank-security.js"></script>
+    <script src="../assets/group-modal.js"></script>
   </body>
 </html>

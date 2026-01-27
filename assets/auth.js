@@ -23,15 +23,26 @@ async function handleLogin(event) {
   setError('');
 
   const form = event.currentTarget;
-  const email = form.querySelector('[name="email"]').value.trim().toLowerCase();
+  const phoneInput = form.querySelector('[name="phone"]')?.value.trim();
+  const emailInput = form.querySelector('[name="email"]')?.value.trim().toLowerCase();
   const password = form.querySelector('[name="password"]').value;
+  const confirm = form.querySelector('[name="confirmPassword"]')?.value;
+
+  if (confirm !== undefined && password !== confirm) {
+    setError('As senhas não coincidem.');
+    return;
+  }
 
   try {
     const supabase = await getSupabaseClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    const credentials = { password };
+    if (emailInput) {
+      credentials.email = emailInput;
+    } else if (phoneInput) {
+      credentials.phone = phoneInput;
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword(credentials);
 
     if (error || !data?.user) {
       const message = String(error?.message || '').toLowerCase();

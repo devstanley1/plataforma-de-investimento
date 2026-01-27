@@ -14,12 +14,28 @@
         </h1>
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
-          <a class="top-action" href="#">Grupo</a>
+          <button class="top-action group-button" type="button">Grupo</button>
           <a class="top-action auth-only" href="deposit.html">Recargas</a>
           <a class="top-action auth-only" href="withdraw.html">Retiradas</a>
         </nav>
       </div>
     </header>
+
+    <div id="group-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="group-modal-title">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card">
+        <h2 id="group-modal-title" class="modal-title">Bem-vindo à Netflix Investimento</h2>
+        <p class="modal-text">
+          Somos uma empresa dedicada a oferecer uma experiência de investimento em títulos Netflix com segurança,
+          transparência e retorno diário. Nossa missão é conectar você aos melhores filmes e séries licenciados,
+          com acompanhamento em tempo real e suporte especializado.
+        </p>
+        <div class="modal-actions">
+          <a class="modal-primary" href="#">Acessar grupo</a>
+          <button class="modal-secondary" type="button" data-close-modal>Fechar</button>
+        </div>
+      </div>
+    </div>
 
     <section class="banner-grid max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <img class="banner-image" src="../assets/img/banner%201.jpeg" alt="Banner Netflix 1" loading="lazy" />
@@ -35,20 +51,33 @@
           <p class="mt-2 text-gray-600">Solicite a retirada para sua conta bancária cadastrada.</p>
 
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Valor da retirada (R$)</label>
-                <input type="number" min="1" step="0.01" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0,00" />
+            <form id="withdraw-form" class="space-y-4">
+              <p id="withdraw-error" class="text-sm text-red-600" style="display:none;"></p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Valor da retirada (R$)</label>
+                  <input type="number" min="1" step="0.01" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0,00" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de documento</label>
+                  <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option>CPF</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+                  <input id="cpf" type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="000.000.000-00" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Senha de retirada</label>
+                  <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
+                </div>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de retirada</label>
-                <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
+              <div class="mt-4">
+                <button type="submit" class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar retirada</button>
               </div>
-            </div>
-            <div class="mt-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar retirada</button>
-            </div>
-            <p class="mt-3 text-xs text-gray-500">Certifique-se de ter cadastrado seu banco no Perfil.</p>
+              <p class="mt-3 text-xs text-gray-500">Certifique-se de ter cadastrado seu banco no Perfil.</p>
+            </form>
           </section>
         </div>
       </main>
@@ -63,5 +92,54 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/supabase.js"></script>
     <script src="../assets/session.js"></script>
+    <script src="../assets/group-modal.js"></script>
+    <script>
+      function isValidCpf(value) {
+        const cpf = String(value || '').replace(/\D/g, '');
+        if (!cpf || cpf.length !== 11 || /^([0-9])\1+$/.test(cpf)) return false;
+
+        let sum = 0;
+        for (let i = 0; i < 9; i += 1) {
+          sum += Number(cpf[i]) * (10 - i);
+        }
+        let firstCheck = (sum * 10) % 11;
+        if (firstCheck === 10) firstCheck = 0;
+        if (firstCheck !== Number(cpf[9])) return false;
+
+        sum = 0;
+        for (let i = 0; i < 10; i += 1) {
+          sum += Number(cpf[i]) * (11 - i);
+        }
+        let secondCheck = (sum * 10) % 11;
+        if (secondCheck === 10) secondCheck = 0;
+        return secondCheck === Number(cpf[10]);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('withdraw-form');
+        const cpfInput = document.getElementById('cpf');
+        const errorEl = document.getElementById('withdraw-error');
+
+        if (!form || !cpfInput || !errorEl) return;
+
+        const setError = (message) => {
+          errorEl.textContent = message || '';
+          errorEl.style.display = message ? 'block' : 'none';
+        };
+
+        cpfInput.addEventListener('blur', () => {
+          if (!cpfInput.value) return;
+          setError(isValidCpf(cpfInput.value) ? '' : 'CPF inválido. Verifique e tente novamente.');
+        });
+
+        form.addEventListener('submit', (event) => {
+          if (!isValidCpf(cpfInput.value)) {
+            event.preventDefault();
+            setError('CPF inválido. Verifique e tente novamente.');
+            cpfInput.focus();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
