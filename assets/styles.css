@@ -217,7 +217,7 @@ a {
 .modal-card {
   position: relative;
   z-index: 1;
-  width: min(520px, 90vw);
+  width: min(720px, 94vw);
   border-radius: 1rem;
   background: #141414;
   border: 1px solid var(--netflix-border);

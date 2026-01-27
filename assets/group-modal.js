@@ -31,6 +31,8 @@ function setupGroupModal() {
   if (backdrop) {
     backdrop.addEventListener('click', closeModal);
   }
+
+  openModal();
 }
 
 document.addEventListener('DOMContentLoaded', setupGroupModal);
