@@ -58,10 +58,22 @@ async function handleRegister(event) {
   const phone = form.querySelector('[name="phone"]').value.trim();
   const password = form.querySelector('[name="password"]').value;
   const confirm = form.querySelector('[name="confirmPassword"]').value;
+  const withdrawPassword = form.querySelector('[name="withdrawPassword"]').value;
+  const confirmWithdrawPassword = form.querySelector('[name="confirmWithdrawPassword"]').value;
   const referralCode = generateReferralCode();
 
   if (password !== confirm) {
     setError('As senhas não coincidem.');
+    return;
+  }
+
+  if (!withdrawPassword) {
+    setError('Informe a senha de saque.');
+    return;
+  }
+
+  if (withdrawPassword !== confirmWithdrawPassword) {
+    setError('As senhas de saque não coincidem.');
     return;
   }
 
@@ -74,7 +86,8 @@ async function handleRegister(event) {
         data: {
           name,
           phone: phone || null,
-          referral_code: referralCode
+          referral_code: referralCode,
+          withdraw_password: withdrawPassword
         }
       }
     });
