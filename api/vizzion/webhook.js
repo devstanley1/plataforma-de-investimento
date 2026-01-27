@@ -1,7 +1,13 @@
-const { readJsonBody, sendJson } = require('../_utils');
+const { handleCors, readJsonBody, sendJson } = require('../_utils');
 const { supabase } = require('../_supabase');
 
 module.exports = async (req, res) => {
+  if (handleCors(req, res)) return;
+
+  if (req.method === 'GET') {
+    return sendJson(res, 200, { status: 'ok' });
+  }
+
   if (req.method !== 'POST') {
     return sendJson(res, 405, { message: 'Método não permitido.' });
   }
