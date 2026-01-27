@@ -168,6 +168,10 @@ a {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
+.banner-grid.is-triple {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
 .banner-image {
   width: 100%;
   height: 320px;
@@ -175,6 +179,10 @@ a {
   border-radius: 0.85rem;
   border: 1px solid var(--netflix-border);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.banner-grid.is-triple .banner-image {
+  height: 220px;
 }
 .site-header {
   flex-wrap: wrap;
@@ -502,6 +510,7 @@ a {
   .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
   .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
   .banner-image { height: 380px; }
+  .banner-grid.is-triple .banner-image { height: 260px; }
 }
 
 @media (min-width: 1024px) {
@@ -511,4 +520,6 @@ a {
   .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .banner-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .banner-image { height: 420px; }
+  .banner-grid.is-triple { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .banner-grid.is-triple .banner-image { height: 260px; }
 }

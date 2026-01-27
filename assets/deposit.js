@@ -10,6 +10,10 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 }
 
+function normalizeCpf(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('deposit-form');
   const amountInput = document.getElementById('deposit-amount');
@@ -63,13 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
       userMeta = {};
     }
 
+    const cpfDigits = normalizeCpf(cpfInput?.value || '');
+    if (cpfDigits && cpfDigits.length !== 11) {
+      setError('Informe um CPF válido com 11 dígitos.');
+      return;
+    }
+
     const payload = {
       amount,
       client: {
         name: userMeta.name || 'Investidor Netflix',
         phone: userMeta.phone || '+55 00 00000-0000',
         email: userEmail || null,
-        cpf: cpfInput?.value?.trim() || null
+        cpf: cpfDigits || null
       },
       metadata: { source: 'site' }
     };
