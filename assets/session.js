@@ -46,7 +46,7 @@ async function loadSession() {
 function setupLogout() {
   const logout = document.getElementById('logout-link') || document.getElementById('logout-button');
   if (!logout) return;
-  logout.addEventListener('click', (e) => {
+  logout.addEventListener('click', async (e) => {
     e.preventDefault();
     const supabase = await getSupabaseClient();
     supabase.auth.signOut().finally(() => {
