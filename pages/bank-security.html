@@ -3,18 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Meu banco e senha - Plataforma de Investimento</title>
+    <title>Banco e segurança - Netflix Invest</title>
     <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="min-h-screen bg-gray-50">
     <header class="bg-white border-b border-gray-200">
       <div class="site-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
+        <h1 class="site-logo">
+          <img src="../assets/img/banner%202.jpeg" alt="Logo do site" />
+        </h1>
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Recargas</a>
-          <a class="top-action" href="withdraw.html">Retiradas</a>
+          <a class="top-action" href="deposit.html">Aportes</a>
+          <a class="top-action" href="withdraw.html">Resgates</a>
         </nav>
       </div>
     </header>
@@ -23,20 +25,20 @@
       <main class="page-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <a href="profile.html" class="text-sm text-blue-600 hover:text-blue-500">← Voltar</a>
-          <h2 class="mt-4 text-2xl font-bold text-gray-900">Meu banco e senha</h2>
-          <p class="mt-2 text-gray-600">Gerencie seus dados bancários e senhas de acesso.</p>
+          <h2 class="mt-4 text-2xl font-bold text-gray-900">Banco e segurança</h2>
+          <p class="mt-2 text-gray-600">Gerencie dados bancários e senhas da sua conta Netflix Invest.</p>
 
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 text-sm" data-toggle="bank-form">Meu banco</button>
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="login-password">Alterar senha de login</button>
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="withdraw-password">Alterar senha de saque</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 text-sm" data-toggle="bank-form">Dados bancários</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="login-password">Senha de acesso</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="withdraw-password">Senha de resgate</button>
             </div>
           </section>
 
           <section id="bank-form" class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
             <h3 class="text-lg font-medium text-gray-900">Dados bancários</h3>
-            <p class="mt-2 text-sm text-gray-600">Preencha seus dados para receber depósitos e saques com segurança.</p>
+            <p class="mt-2 text-sm text-gray-600">Preencha seus dados para receber aportes e resgates com segurança.</p>
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Titular da conta</label>
@@ -71,7 +73,7 @@
               </div>
             </div>
             <div class="mt-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar dados</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar dados bancários</button>
             </div>
           </section>
 
@@ -93,19 +95,19 @@
           </section>
 
           <section id="withdraw-password" class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
-            <h3 class="text-lg font-medium text-gray-900">Alterar senha de saque</h3>
+            <h3 class="text-lg font-medium text-gray-900">Alterar senha de resgate</h3>
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de saque atual</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de resgate atual</label>
                 <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nova senha de saque</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nova senha de resgate</label>
                 <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
               </div>
             </div>
             <div class="mt-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar nova senha de saque</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar nova senha de resgate</button>
             </div>
           </section>
         </div>
@@ -113,9 +115,9 @@
     </div>
 
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
-      <a class="bottom-nav-link" href="transactions.html">🧾<span>Transações</span></a>
-      <a class="bottom-nav-link" href="referrals.html">🤝<span>Convidar</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -3,19 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard - Plataforma de Investimento</title>
+    <title>Redirecionando - Netflix Invest</title>
     <meta http-equiv="refresh" content="0;url=products.html" />
     <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="min-h-screen bg-gray-50">
     <header class="bg-white border-b border-gray-200">
       <div class="site-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
+        <h1 class="site-logo">
+          <img src="../assets/img/banner%202.jpeg" alt="Logo do site" />
+        </h1>
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Recargas</a>
-          <a class="top-action" href="withdraw.html">Retiradas</a>
+          <a class="top-action" href="deposit.html">Aportes</a>
+          <a class="top-action" href="withdraw.html">Resgates</a>
         </nav>
       </div>
     </header>
@@ -23,8 +25,8 @@
     <div class="page-shell">
       <main class="page-content space-y-6">
         <div>
-          <h2 class="text-2xl font-bold text-gray-900">Olá, <span id="user-name">investidor(a)</span>! 👋</h2>
-          <p class="mt-1 text-sm text-gray-500">Aqui está um resumo da sua carteira de investimentos.</p>
+          <h2 class="text-2xl font-bold text-gray-900">Olá, <span id="user-name">investidor(a)</span> Netflix! 👋</h2>
+          <p class="mt-1 text-sm text-gray-500">Aqui está um resumo da sua carteira de licenças Netflix.</p>
         </div>
 
         <section class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -32,7 +34,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 p-3 rounded-lg bg-green-100">R$</div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-500">Saldo Disponível</p>
+                <p class="text-sm font-medium text-gray-500">Crédito Disponível</p>
                 <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
               </div>
             </div>
@@ -41,7 +43,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 p-3 rounded-lg bg-blue-100">📊</div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-500">Total Investido</p>
+                <p class="text-sm font-medium text-gray-500">Total em Licenças</p>
                 <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
               </div>
             </div>
@@ -50,7 +52,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 p-3 rounded-lg bg-purple-100">↗</div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-500">Rendimentos</p>
+                <p class="text-sm font-medium text-gray-500">Retornos</p>
                 <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
               </div>
             </div>
@@ -59,7 +61,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 p-3 rounded-lg bg-orange-100">👥</div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-500">Comissões</p>
+                <p class="text-sm font-medium text-gray-500">Bônus</p>
                 <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
               </div>
             </div>
@@ -69,28 +71,28 @@
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="mb-4">
-              <h3 class="text-lg font-medium text-gray-900">Investimentos Recentes</h3>
-              <p class="mt-1 text-sm text-gray-500">Seus últimos investimentos</p>
+              <h3 class="text-lg font-medium text-gray-900">Títulos recentes</h3>
+              <p class="mt-1 text-sm text-gray-500">Suas últimas licenças</p>
             </div>
             <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-500">
-              Nenhum investimento encontrado ainda.
+              Nenhum título encontrado ainda.
             </div>
           </div>
 
           <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="mb-4">
-              <h3 class="text-lg font-medium text-gray-900">Programa de convites</h3>
-              <p class="mt-1 text-sm text-gray-500">Seus ganhos com indicações</p>
+              <h3 class="text-lg font-medium text-gray-900">Indicações Netflix</h3>
+              <p class="mt-1 text-sm text-gray-500">Seus bônus por novos investidores</p>
             </div>
             <div class="space-y-4">
               <div class="grid grid-cols-2 gap-4">
                 <div class="text-center p-4 bg-gray-50 rounded-lg">
                   <p class="text-2xl font-bold text-gray-900">0</p>
-                  <p class="text-sm text-gray-500">Indicações</p>
+                  <p class="text-sm text-gray-500">Novos investidores</p>
                 </div>
                 <div class="text-center p-4 bg-gray-50 rounded-lg">
                   <p class="text-2xl font-bold text-gray-900">R$ 0,00</p>
-                  <p class="text-sm text-gray-500">Comissões</p>
+                  <p class="text-sm text-gray-500">Bônus</p>
                 </div>
               </div>
               <div class="pt-4">
@@ -107,20 +109,20 @@
               <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">📊</div>
               <div class="ml-3">
                 <p class="font-medium text-blue-900">Investir</p>
-                <p class="text-sm text-blue-600">Ver produtos</p>
+                <p class="text-sm text-blue-600">Ver catálogo</p>
               </div>
             </a>
-            <a class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors" href="transactions.html">
+                <a class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors" href="transactions.html">
               <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">R$</div>
               <div class="ml-3">
-                <p class="font-medium text-green-900">Depositar</p>
-                <p class="text-sm text-green-600">Adicionar saldo</p>
+                    <p class="font-medium text-green-900">Aportar</p>
+                    <p class="text-sm text-green-600">Adicionar crédito</p>
               </div>
             </a>
             <a class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors" href="referrals.html">
               <div class="flex-shrink-0 p-2 bg-purple-100 rounded-lg">👥</div>
               <div class="ml-3">
-                <p class="font-medium text-purple-900">Convidar</p>
+                <p class="font-medium text-purple-900">Indicar</p>
                 <p class="text-sm text-purple-600">Ganhar bônus</p>
               </div>
             </a>
@@ -136,9 +138,9 @@
       </main>
     </div>
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link is-active" href="products.html">📊<span>Produtos</span></a>
-      <a class="bottom-nav-link" href="transactions.html">🧾<span>Transações</span></a>
-      <a class="bottom-nav-link" href="referrals.html">🤝<span>Convidar</span></a>
+      <a class="bottom-nav-link is-active" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

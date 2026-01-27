@@ -3,18 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Transações - Plataforma de Investimento</title>
+    <title>Movimentações - Netflix Invest</title>
     <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="min-h-screen bg-gray-50">
     <header class="bg-white border-b border-gray-200">
       <div class="site-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
+        <h1 class="site-logo">
+          <img src="../assets/img/banner%202.jpeg" alt="Logo do site" />
+        </h1>
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Recargas</a>
-          <a class="top-action" href="withdraw.html">Retiradas</a>
+          <a class="top-action" href="deposit.html">Aportes</a>
+          <a class="top-action" href="withdraw.html">Resgates</a>
         </nav>
       </div>
     </header>
@@ -22,28 +24,28 @@
     <div class="page-shell">
       <main class="page-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 class="text-2xl font-bold text-gray-900">Transações</h2>
-          <p class="mt-2 text-gray-600">Histórico de depósitos, saques e aplicações.</p>
+          <h2 class="text-2xl font-bold text-gray-900">Movimentações</h2>
+          <p class="mt-2 text-gray-600">Histórico de aportes, resgates e licenças Netflix.</p>
 
           <section class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <p class="text-sm text-gray-500">Saldo total disponível para saque</p>
+            <p class="text-sm text-gray-500">Saldo disponível para resgate</p>
             <p class="text-2xl font-bold text-gray-900 mt-2" id="available-balance">R$ 0,00</p>
             <div class="mt-4 flex flex-wrap gap-3">
-              <a class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm" href="deposit.html">Depositar</a>
-              <a class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-2 text-sm" href="withdraw.html">Sacar</a>
+              <a class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm" href="deposit.html">Aportar</a>
+              <a class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-2 text-sm" href="withdraw.html">Resgatar</a>
             </div>
           </section>
 
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <p class="text-sm text-gray-500">Nenhuma transação registrada ainda.</p>
+            <p class="text-sm text-gray-500">Nenhuma movimentação registrada ainda.</p>
           </section>
         </div>
       </main>
     </div>
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
-      <a class="bottom-nav-link is-active" href="transactions.html">🧾<span>Transações</span></a>
-      <a class="bottom-nav-link" href="referrals.html">🤝<span>Convidar</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link is-active" href="transactions.html">🧾<span>Movimentações</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
