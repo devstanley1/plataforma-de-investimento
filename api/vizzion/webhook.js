@@ -8,7 +8,9 @@ module.exports = async (req, res) => {
     return sendJson(res, 200, { status: 'ok' });
   }
 
-  if (req.method !== 'POST') {
+  const method = req.method?.toUpperCase();
+
+  if (method !== 'POST' && method !== 'PUT' && method !== 'PATCH') {
     return sendJson(res, 405, { message: 'Método não permitido.' });
   }
 
