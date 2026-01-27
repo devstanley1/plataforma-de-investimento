@@ -33,6 +33,10 @@ async function loadSession() {
     if (emailEl) {
       emailEl.textContent = email;
     }
+
+    document.querySelectorAll('.auth-only').forEach((el) => {
+      el.classList.remove('auth-only');
+    });
   } catch (e) {
     await supabase.auth.signOut();
     window.location.href = 'login.html';

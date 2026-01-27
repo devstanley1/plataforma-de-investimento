@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Resgate - Netflix Invest</title>
+    <title>Retirada - Netflix Invest</title>
     <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="min-h-screen bg-gray-50">
@@ -15,8 +15,8 @@
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Aportes</a>
-          <a class="top-action" href="withdraw.html">Resgates</a>
+          <a class="top-action auth-only" href="deposit.html">Recargas</a>
+          <a class="top-action auth-only" href="withdraw.html">Retiradas</a>
         </nav>
       </div>
     </header>
@@ -31,22 +31,22 @@
       <main class="page-content">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <a href="transactions.html" class="text-sm text-blue-600 hover:text-blue-500">← Voltar</a>
-          <h2 class="mt-4 text-2xl font-bold text-gray-900">Resgate</h2>
-          <p class="mt-2 text-gray-600">Solicite o resgate para sua conta bancária cadastrada.</p>
+          <h2 class="mt-4 text-2xl font-bold text-gray-900">Retirada</h2>
+          <p class="mt-2 text-gray-600">Solicite a retirada para sua conta bancária cadastrada.</p>
 
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Valor do resgate (R$)</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valor da retirada (R$)</label>
                 <input type="number" min="1" step="0.01" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0,00" />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de resgate</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de retirada</label>
                 <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
               </div>
             </div>
             <div class="mt-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar resgate</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar retirada</button>
             </div>
             <p class="mt-3 text-xs text-gray-500">Certifique-se de ter cadastrado seu banco no Perfil.</p>
           </section>
@@ -55,7 +55,7 @@
     </div>
 
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
       <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
       <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>

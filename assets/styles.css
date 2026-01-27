@@ -180,6 +180,9 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+.auth-only {
+  display: none !important;
+}
 .site-logo {
   display: flex;
   align-items: center;

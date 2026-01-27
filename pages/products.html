@@ -15,8 +15,8 @@
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Aportes</a>
-          <a class="top-action" href="withdraw.html">Resgates</a>
+          <a class="top-action auth-only" href="deposit.html">Recargas</a>
+          <a class="top-action auth-only" href="withdraw.html">Retiradas</a>
         </nav>
       </div>
     </header>
@@ -29,138 +29,16 @@
 
     <div class="page-shell">
       <main class="page-content">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div class="space-y-3">
             <a href="products.html" class="text-sm text-blue-600 hover:text-blue-500">← Início</a>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">Catálogo Netflix</h2>
-              <p class="mt-2 text-gray-600">Acompanhe sua carteira Netflix e escolha novos títulos para investir.</p>
-            </div>
-            <div>
-              <h3 class="text-xl font-semibold text-gray-900">Olá, <span id="user-name">investidor(a)</span> Netflix! 👋</h3>
-              <p class="mt-1 text-sm text-gray-500">Aqui está um resumo da sua carteira de licenças.</p>
+              <h2 class="text-2xl font-bold text-gray-900">Produtos Netflix</h2>
+              <p class="mt-2 text-gray-600">Selecione títulos Netflix e acompanhe o ciclo de retorno.</p>
             </div>
           </div>
 
-          <section class="space-y-6">
-            <div>
-              <h3 class="text-xl font-semibold text-gray-900">Sua carteira Netflix</h3>
-              <p class="mt-1 text-sm text-gray-500">Visão geral dos seus títulos licenciados.</p>
-            </div>
-
-            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 p-3 rounded-lg bg-green-100">R$</div>
-                  <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Crédito Disponível</p>
-                    <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
-                  </div>
-                </div>
-              </div>
-              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 p-3 rounded-lg bg-blue-100">📊</div>
-                  <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total em Licenças</p>
-                    <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
-                  </div>
-                </div>
-              </div>
-              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 p-3 rounded-lg bg-purple-100">↗</div>
-                  <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Retornos</p>
-                    <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
-                  </div>
-                </div>
-              </div>
-              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 p-3 rounded-lg bg-orange-100">👥</div>
-                  <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Bônus</p>
-                    <p class="text-lg font-semibold text-gray-900">R$ 0,00</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div class="mb-4">
-                <h4 class="text-lg font-medium text-gray-900">Títulos ativos</h4>
-                <p class="mt-1 text-sm text-gray-500">Seus títulos em licenciamento.</p>
-              </div>
-              <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-500">
-                Nenhum título ativo no momento.
-              </div>
-            </div>
-          </section>
-
-          <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div class="mb-4">
-                <h3 class="text-lg font-medium text-gray-900">Indicações Netflix</h3>
-                <p class="mt-1 text-sm text-gray-500">Seus bônus por novos investidores</p>
-              </div>
-              <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="text-center p-4 bg-gray-50 rounded-lg">
-                    <p class="text-2xl font-bold text-gray-900">0</p>
-                    <p class="text-sm text-gray-500">Novos investidores</p>
-                  </div>
-                  <div class="text-center p-4 bg-gray-50 rounded-lg">
-                    <p class="text-2xl font-bold text-gray-900">R$ 0,00</p>
-                    <p class="text-sm text-gray-500">Bônus</p>
-                  </div>
-                </div>
-                <div class="pt-4">
-                  <a href="referrals.html" class="text-sm font-medium text-blue-600 hover:text-blue-500">Gerenciar indicações →</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Ações rápidas</h3>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors" href="products.html">
-                  <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">📊</div>
-                  <div class="ml-3">
-                    <p class="font-medium text-blue-900">Investir</p>
-                    <p class="text-sm text-blue-600">Ver catálogo</p>
-                  </div>
-                </a>
-                <a class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors" href="transactions.html">
-                  <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">R$</div>
-                  <div class="ml-3">
-                    <p class="font-medium text-green-900">Aportar</p>
-                    <p class="text-sm text-green-600">Adicionar crédito</p>
-                  </div>
-                </a>
-                <a class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors" href="referrals.html">
-                  <div class="flex-shrink-0 p-2 bg-purple-100 rounded-lg">👥</div>
-                  <div class="ml-3">
-                    <p class="font-medium text-purple-900">Indicar</p>
-                    <p class="text-sm text-purple-600">Ganhar bônus</p>
-                  </div>
-                </a>
-                <a class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" href="profile.html">
-                  <div class="flex-shrink-0 p-2 bg-gray-100 rounded-lg">⚙</div>
-                  <div class="ml-3">
-                    <p class="font-medium text-gray-900">Perfil</p>
-                    <p class="text-sm text-gray-600">Conta e segurança</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section class="space-y-4">
-            <div>
-              <h3 class="text-xl font-semibold text-gray-900">Filmes e séries para licenciar</h3>
-              <p class="mt-1 text-sm text-gray-500">Selecione títulos Netflix e acompanhe o ciclo de retorno.</p>
-            </div>
+          <section class="space-y-4 mt-8">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -299,7 +177,7 @@
       </main>
     </div>
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link is-active" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link is-active" href="products.html">📊<span>Produtos</span></a>
       <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
       <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>

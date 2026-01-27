@@ -15,8 +15,8 @@
         <nav class="top-actions text-sm">
           <a class="top-action" href="#">Suporte online</a>
           <a class="top-action" href="#">Grupo</a>
-          <a class="top-action" href="deposit.html">Aportes</a>
-          <a class="top-action" href="withdraw.html">Resgates</a>
+          <a class="top-action auth-only" href="deposit.html">Recargas</a>
+          <a class="top-action auth-only" href="withdraw.html">Retiradas</a>
         </nav>
       </div>
     </header>
@@ -38,13 +38,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 text-sm" data-toggle="bank-form">Dados bancários</button>
               <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="login-password">Senha de acesso</button>
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="withdraw-password">Senha de resgate</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm" data-toggle="withdraw-password">Senha de retirada</button>
             </div>
           </section>
 
           <section id="bank-form" class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
             <h3 class="text-lg font-medium text-gray-900">Dados bancários</h3>
-            <p class="mt-2 text-sm text-gray-600">Preencha seus dados para receber aportes e resgates com segurança.</p>
+            <p class="mt-2 text-sm text-gray-600">Preencha seus dados para receber depósitos e retiradas com segurança.</p>
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Titular da conta</label>
@@ -101,19 +101,19 @@
           </section>
 
           <section id="withdraw-password" class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
-            <h3 class="text-lg font-medium text-gray-900">Alterar senha de resgate</h3>
+            <h3 class="text-lg font-medium text-gray-900">Alterar senha de retirada</h3>
             <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de resgate atual</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Senha de retirada atual</label>
                 <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nova senha de resgate</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nova senha de retirada</label>
                 <input type="password" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="••••••••" />
               </div>
             </div>
             <div class="mt-4">
-              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar nova senha de resgate</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar nova senha de retirada</button>
             </div>
           </section>
         </div>
@@ -121,7 +121,7 @@
     </div>
 
     <nav class="bottom-nav" aria-label="Menu principal">
-      <a class="bottom-nav-link" href="products.html">📊<span>Catálogo</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
       <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
       <a class="bottom-nav-link" href="referrals.html">🤝<span>Indicar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
