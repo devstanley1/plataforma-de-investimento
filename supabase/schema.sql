@@ -28,6 +28,10 @@ create table if not exists public.profiles (
   updated_at timestamptz default now()
 );
 
+create unique index if not exists profiles_name_unique on public.profiles (lower(name));
+
+drop trigger if exists profiles_set_updated_at on public.profiles;
+
 create trigger profiles_set_updated_at
 before update on public.profiles
 for each row execute function public.set_updated_at();
@@ -41,6 +45,8 @@ create table if not exists public.wallets (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+drop trigger if exists wallets_set_updated_at on public.wallets;
 
 create trigger wallets_set_updated_at
 before update on public.wallets
@@ -61,6 +67,8 @@ create table if not exists public.investment_products (
   updated_at timestamptz default now()
 );
 
+drop trigger if exists investment_products_set_updated_at on public.investment_products;
+
 create trigger investment_products_set_updated_at
 before update on public.investment_products
 for each row execute function public.set_updated_at();
@@ -78,6 +86,8 @@ create table if not exists public.investments (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+drop trigger if exists investments_set_updated_at on public.investments;
 
 create trigger investments_set_updated_at
 before update on public.investments
@@ -97,6 +107,8 @@ create table if not exists public.transactions (
   updated_at timestamptz default now()
 );
 
+drop trigger if exists transactions_set_updated_at on public.transactions;
+
 create trigger transactions_set_updated_at
 before update on public.transactions
 for each row execute function public.set_updated_at();
@@ -112,9 +124,14 @@ create table if not exists public.referrals (
   updated_at timestamptz default now()
 );
 
+drop trigger if exists referrals_set_updated_at on public.referrals;
+
 create trigger referrals_set_updated_at
 before update on public.referrals
 for each row execute function public.set_updated_at();
+
+alter table public.profiles
+  drop constraint if exists profiles_referral_code_fk;
 
 alter table public.profiles
   add constraint profiles_referral_code_fk
@@ -132,6 +149,8 @@ create table if not exists public.payments (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+drop trigger if exists payments_set_updated_at on public.payments;
 
 create trigger payments_set_updated_at
 before update on public.payments
@@ -170,6 +189,21 @@ alter table public.referral_commissions enable row level security;
 alter table public.payments enable row level security;
 
 -- Políticas básicas
+drop policy if exists "Profiles are readable by owner" on public.profiles;
+drop policy if exists "Profiles are updatable by owner" on public.profiles;
+drop policy if exists "Wallets are readable by owner" on public.wallets;
+drop policy if exists "Wallets are updatable by owner" on public.wallets;
+drop policy if exists "Investments are readable by owner" on public.investments;
+drop policy if exists "Investments are insertable by owner" on public.investments;
+drop policy if exists "Investments are updatable by owner" on public.investments;
+drop policy if exists "Transactions are readable by owner" on public.transactions;
+drop policy if exists "Transactions are insertable by owner" on public.transactions;
+drop policy if exists "Referrals are readable by anyone" on public.referrals;
+drop policy if exists "Referrals are manageable by owner" on public.referrals;
+drop policy if exists "Referral commissions are readable by owner" on public.referral_commissions;
+drop policy if exists "Payments are readable by owner" on public.payments;
+drop policy if exists "Payments are insertable by owner" on public.payments;
+
 create policy "Profiles are readable by owner"
   on public.profiles for select
   using (auth.uid() = id);
@@ -253,6 +287,8 @@ begin
   return new;
 end;
 $$;
+
+drop trigger if exists on_auth_user_created on auth.users;
 
 create trigger on_auth_user_created
 after insert on auth.users

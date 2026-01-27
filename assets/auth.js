@@ -80,6 +80,10 @@ async function handleRegister(event) {
     });
 
     if (error) {
+      const message = String(error.message || '').toLowerCase();
+      if (message.includes('profiles_name_unique') || message.includes('name') && message.includes('duplicate')) {
+        throw new Error('Nome de usuário já está em uso.');
+      }
       throw new Error(error.message || 'Erro ao criar conta');
     }
 

@@ -3,7 +3,7 @@ function formatCurrency(value) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const balance = Number(localStorage.getItem('userBalance') || '12500');
+  const balance = Number(localStorage.getItem('userBalance') || '0');
   const balanceEl = document.getElementById('available-balance');
   if (balanceEl) {
     balanceEl.textContent = formatCurrency(balance);

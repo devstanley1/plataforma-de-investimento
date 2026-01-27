@@ -3,8 +3,8 @@ function formatCurrency(value) {
 }
 
 function loadProfileStats() {
-  const balance = Number(localStorage.getItem('userBalance') || '12500');
-  const income = Number(localStorage.getItem('userIncome') || '2450');
+  const balance = Number(localStorage.getItem('userBalance') || '0');
+  const income = Number(localStorage.getItem('userIncome') || '0');
 
   const balanceEl = document.getElementById('user-balance');
   if (balanceEl) balanceEl.textContent = formatCurrency(balance);

@@ -37,7 +37,11 @@ module.exports = async (req, res) => {
   });
 
   if (error) {
-    if (String(error.message || '').toLowerCase().includes('already')) {
+    const message = String(error.message || '').toLowerCase();
+    if (message.includes('profiles_name_unique') || (message.includes('name') && message.includes('duplicate'))) {
+      return sendJson(res, 409, { message: 'Nome de usuário já está em uso.' });
+    }
+    if (message.includes('already')) {
       return sendJson(res, 409, { message: 'Email já cadastrado.' });
     }
     return sendJson(res, 500, { message: 'Erro ao criar conta.' });
