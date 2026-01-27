@@ -101,9 +101,37 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data?.message || 'Erro ao gerar PIX.');
       }
 
-      const qrCode = data?.pix?.qrCode || data?.pixInformation?.qrCode || data?.pix?.qr_code || '';
+      const qrCode =
+        data?.pix?.qrCode ||
+        data?.pixInformation?.qrCode ||
+        data?.pix?.qr_code ||
+        data?.pix?.copyPaste ||
+        data?.pix?.emv ||
+        data?.pix?.code ||
+        data?.pix?.qrcode ||
+        data?.pix?.brcode ||
+        data?.pix?.brCode ||
+        data?.brcode ||
+        data?.brCode ||
+        data?.copyPaste ||
+        data?.pixCopyPaste ||
+        data?.qrcode ||
+        data?.qrCode ||
+        data?.qr_code ||
+        '';
 
-      if (!qrCode) {
+      const qrImage =
+        data?.pix?.qrCodeImage ||
+        data?.pix?.qrCodeBase64 ||
+        data?.pix?.qr_image ||
+        data?.pix?.image ||
+        data?.qrCodeImage ||
+        data?.qrCodeBase64 ||
+        data?.qr_image ||
+        data?.image ||
+        '';
+
+      if (!qrCode && !qrImage) {
         throw new Error('PIX gerado sem QR Code.');
       }
 
@@ -111,11 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
         pixAmount.textContent = formatCurrency(amount);
       }
       if (pixCode) {
-        pixCode.textContent = qrCode;
+        pixCode.textContent = qrCode || '';
       }
       if (pixQr) {
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(qrCode)}`;
-        pixQr.src = qrUrl;
+        if (qrImage && String(qrImage).startsWith('data:image')) {
+          pixQr.src = qrImage;
+        } else if (qrImage) {
+          pixQr.src = `data:image/png;base64,${qrImage}`;
+        } else if (qrCode) {
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(qrCode)}`;
+          pixQr.src = qrUrl;
+        }
       }
       if (pixBox) {
         pixBox.classList.remove('hidden');
