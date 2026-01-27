@@ -58,11 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let userMeta = {};
     let userEmail = null;
+    let userId = null;
     try {
       const supabase = await getSupabaseClient();
       const { data } = await supabase.auth.getUser();
       userMeta = data?.user?.user_metadata || {};
       userEmail = data?.user?.email || null;
+      userId = data?.user?.id || null;
     } catch {
       userMeta = {};
     }
@@ -85,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         email: userEmail || null,
         cpf: cpfDigits
       },
-      metadata: { source: 'site' }
+      metadata: { source: 'site', userId }
     };
 
     try {

@@ -24,12 +24,80 @@ module.exports = async (req, res) => {
   if (supabase) {
     try {
       await supabase.from('webhooks').insert({
-        event_type: payload?.event || 'unknown',
+        event_type: payload?.event || payload?.type || 'unknown',
         payload_json: payload,
         status: 'RECEIVED'
       });
     } catch (error) {
       return sendJson(res, 500, { message: 'Falha ao registrar webhook.' });
+    }
+  }
+
+  const statusRaw = payload?.status || payload?.data?.status || payload?.payment?.status || '';
+  const eventRaw = payload?.event || payload?.type || '';
+  const normalized = `${statusRaw || eventRaw}`.toUpperCase();
+  const isPaid = ['PAID', 'COMPLETED', 'CONFIRMED', 'APPROVED', 'SUCCESS', 'RECEIVED'].some((value) => normalized.includes(value));
+
+  if (supabase && isPaid) {
+    const metadata = payload?.metadata || payload?.data?.metadata || payload?.pix?.metadata || {};
+    const userId = metadata?.userId || metadata?.user_id || payload?.userId || payload?.user_id || null;
+    const amount = Number(payload?.data?.amount || payload?.amount || payload?.data?.value || 0);
+    const reference = payload?.data?.id || payload?.id || payload?.payment?.id || payload?.data?.reference || null;
+
+    if (userId && Number.isFinite(amount) && amount > 0) {
+      try {
+        const { data: wallet, error: walletError } = await supabase
+          .from('wallets')
+          .select('id,balance')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+        if (walletError && walletError.code !== 'PGRST116') {
+          return sendJson(res, 500, { message: 'Falha ao buscar carteira.' });
+        }
+
+        const currentBalance = Number(wallet?.balance || 0);
+        const newBalance = currentBalance + amount;
+
+        if (wallet?.id) {
+          const { error: updateError } = await supabase
+            .from('wallets')
+            .update({ balance: newBalance, currency: 'BRL' })
+            .eq('id', wallet.id);
+
+          if (updateError) {
+            return sendJson(res, 500, { message: 'Falha ao atualizar carteira.' });
+          }
+        } else {
+          const { error: insertError } = await supabase
+            .from('wallets')
+            .insert({ user_id: userId, balance: newBalance, currency: 'BRL' });
+
+          if (insertError) {
+            return sendJson(res, 500, { message: 'Falha ao criar carteira.' });
+          }
+        }
+
+        await supabase.from('payments').insert({
+          user_id: userId,
+          amount,
+          currency: 'BRL',
+          status: 'COMPLETED',
+          gateway_reference: reference,
+          payment_method: 'PIX'
+        });
+
+        await supabase.from('transactions').insert({
+          user_id: userId,
+          type: 'DEPOSIT',
+          amount,
+          currency: 'BRL',
+          status: 'COMPLETED',
+          description: 'Depósito PIX confirmado'
+        });
+      } catch (error) {
+        return sendJson(res, 500, { message: 'Falha ao processar webhook.' });
+      }
     }
   }
 

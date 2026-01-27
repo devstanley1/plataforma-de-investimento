@@ -22,6 +22,8 @@ async function loadSession() {
       throw new Error('Sessão inválida');
     }
 
+    await syncWalletBalance(supabase, data.user.id);
+
     const email = data.user.email || '';
     const fallbackName = email ? email.split('@')[0] : 'Usuário';
     const name = data.user.user_metadata?.name || localStorage.getItem('userName') || fallbackName;
@@ -40,6 +42,23 @@ async function loadSession() {
   } catch (e) {
     await supabase.auth.signOut();
     window.location.href = 'login.html';
+  }
+}
+
+async function syncWalletBalance(supabase, userId) {
+  try {
+    const { data, error } = await supabase
+      .from('wallets')
+      .select('balance')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) return;
+
+    const balance = Number(data?.balance || 0);
+    localStorage.setItem('userBalance', String(balance));
+  } catch {
+    return;
   }
 }
 
