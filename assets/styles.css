@@ -275,6 +275,15 @@ a {
 .modal-secondary:hover {
   background: rgba(255, 255, 255, 0.08);
 }
+.pix-qr {
+  width: 240px;
+  height: 240px;
+  max-width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--netflix-border);
+  background: #ffffff;
+  display: block;
+}
 .site-nav {
   display: flex;
   flex-wrap: wrap;

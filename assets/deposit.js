@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pixCode = document.getElementById('pix-code');
   const pixAmount = document.getElementById('pix-amount');
   const copyBtn = document.getElementById('pix-copy');
+  const pixQr = document.getElementById('pix-qr');
 
   if (!form || !amountInput || !errorEl) return;
 
@@ -97,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (pixCode) {
         pixCode.textContent = qrCode;
+      }
+      if (pixQr) {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(qrCode)}`;
+        pixQr.src = qrUrl;
       }
       if (pixBox) {
         pixBox.classList.remove('hidden');
