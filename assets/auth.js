@@ -15,7 +15,7 @@ async function handleLogin(event) {
   setError('');
 
   const form = event.currentTarget;
-  const email = form.querySelector('[name="email"]').value.trim();
+  const email = form.querySelector('[name="email"]').value.trim().toLowerCase();
   const password = form.querySelector('[name="password"]').value;
 
   try {
@@ -26,6 +26,10 @@ async function handleLogin(event) {
     });
 
     if (error || !data?.user) {
+      const message = String(error?.message || '').toLowerCase();
+      if (message.includes('email not confirmed') || message.includes('confirm')) {
+        throw new Error('Confirme seu email antes de entrar.');
+      }
       throw new Error('Credenciais inválidas.');
     }
 
@@ -42,7 +46,7 @@ async function handleRegister(event) {
 
   const form = event.currentTarget;
   const name = form.querySelector('[name="name"]').value.trim();
-  const email = form.querySelector('[name="email"]').value.trim();
+  const email = form.querySelector('[name="email"]').value.trim().toLowerCase();
   const phone = form.querySelector('[name="phone"]').value.trim();
   const password = form.querySelector('[name="password"]').value;
   const confirm = form.querySelector('[name="confirmPassword"]').value;

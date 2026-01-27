@@ -24,6 +24,10 @@ module.exports = async (req, res) => {
   });
 
   if (error || !data?.user) {
+    const message = String(error?.message || '').toLowerCase();
+    if (message.includes('email not confirmed') || message.includes('confirm')) {
+      return sendJson(res, 401, { message: 'Confirme seu email antes de entrar.' });
+    }
     return sendJson(res, 401, { message: 'Credenciais inválidas.' });
   }
 
