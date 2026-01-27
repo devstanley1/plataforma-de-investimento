@@ -1,4 +1,7 @@
-function getSupabaseClient() {
+async function getSupabaseClient() {
+  if (window.supabaseReady) {
+    await window.supabaseReady;
+  }
   if (window.supabaseClient) return window.supabaseClient;
   throw new Error('Supabase não configurado.');
 }
@@ -19,7 +22,7 @@ async function handleLogin(event) {
   const password = form.querySelector('[name="password"]').value;
 
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -57,7 +60,7 @@ async function handleRegister(event) {
   }
 
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,

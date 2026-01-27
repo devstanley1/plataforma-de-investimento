@@ -1,10 +1,13 @@
-function getSupabaseClient() {
+async function getSupabaseClient() {
+  if (window.supabaseReady) {
+    await window.supabaseReady;
+  }
   if (window.supabaseClient) return window.supabaseClient;
   throw new Error('Supabase não configurado.');
 }
 
 async function loadSession() {
-  const supabase = getSupabaseClient();
+  const supabase = await getSupabaseClient();
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData?.session;
 
@@ -35,7 +38,7 @@ function setupLogout() {
   if (!logout) return;
   logout.addEventListener('click', (e) => {
     e.preventDefault();
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseClient();
     supabase.auth.signOut().finally(() => {
       localStorage.removeItem('userName');
       window.location.href = 'login.html';
