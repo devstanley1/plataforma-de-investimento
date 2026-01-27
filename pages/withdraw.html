@@ -76,6 +76,11 @@
               <div class="mt-4">
                 <button type="submit" class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Solicitar retirada</button>
               </div>
+              <div class="mt-4 bg-gray-50 rounded-lg p-4 text-sm text-gray-600" aria-live="polite">
+                <p>Valor solicitado: <strong id="withdraw-amount">R$ 0,00</strong></p>
+                <p>Taxa de processamento (7%): <strong id="withdraw-fee">R$ 0,00</strong></p>
+                <p>Valor a receber: <strong id="withdraw-net">R$ 0,00</strong></p>
+              </div>
               <p class="mt-3 text-xs text-gray-500">Certifique-se de ter cadastrado seu banco no Perfil.</p>
             </form>
           </section>
@@ -119,8 +124,25 @@
         const form = document.getElementById('withdraw-form');
         const cpfInput = document.getElementById('cpf');
         const errorEl = document.getElementById('withdraw-error');
+        const amountInput = form?.querySelector('input[type="number"]');
+        const amountEl = document.getElementById('withdraw-amount');
+        const feeEl = document.getElementById('withdraw-fee');
+        const netEl = document.getElementById('withdraw-net');
 
         if (!form || !cpfInput || !errorEl) return;
+
+        const formatCurrency = (value) =>
+          new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
+
+        const updateSummary = () => {
+          const rawValue = Number(amountInput?.value || 0);
+          const amount = Number.isFinite(rawValue) && rawValue > 0 ? rawValue : 0;
+          const fee = amount * 0.07;
+          const net = amount - fee;
+          if (amountEl) amountEl.textContent = formatCurrency(amount);
+          if (feeEl) feeEl.textContent = formatCurrency(fee);
+          if (netEl) netEl.textContent = formatCurrency(net);
+        };
 
         const setError = (message) => {
           errorEl.textContent = message || '';
@@ -131,6 +153,9 @@
           if (!cpfInput.value) return;
           setError(isValidCpf(cpfInput.value) ? '' : 'CPF inválido. Verifique e tente novamente.');
         });
+
+        amountInput?.addEventListener('input', updateSummary);
+        updateSummary();
 
         form.addEventListener('submit', (event) => {
           if (!isValidCpf(cpfInput.value)) {
