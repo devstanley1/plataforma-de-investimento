@@ -13,6 +13,11 @@ function setError(message) {
   el.style.display = message ? 'block' : 'none';
 }
 
+function generateReferralCode() {
+  const part = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return `CONV-${part}`;
+}
+
 async function handleLogin(event) {
   event.preventDefault();
   setError('');
@@ -53,6 +58,7 @@ async function handleRegister(event) {
   const phone = form.querySelector('[name="phone"]').value.trim();
   const password = form.querySelector('[name="password"]').value;
   const confirm = form.querySelector('[name="confirmPassword"]').value;
+  const referralCode = generateReferralCode();
 
   if (password !== confirm) {
     setError('As senhas não coincidem.');
@@ -67,7 +73,8 @@ async function handleRegister(event) {
       options: {
         data: {
           name,
-          phone: phone || null
+          phone: phone || null,
+          referral_code: referralCode
         }
       }
     });
@@ -82,6 +89,7 @@ async function handleRegister(event) {
     }
 
     localStorage.setItem('userName', data.user?.user_metadata?.name || '');
+    localStorage.setItem('referralCode', referralCode);
     window.location.href = 'dashboard.html';
   } catch (err) {
     setError(err.message || 'Erro ao criar conta');

@@ -23,9 +23,14 @@ async function loadSession() {
     }
 
     const name = data.user.user_metadata?.name || localStorage.getItem('userName') || 'Usuário';
+    const email = data.user.email || '';
     const el = document.getElementById('user-name');
     if (el) {
       el.textContent = name;
+    }
+    const emailEl = document.getElementById('user-email');
+    if (emailEl) {
+      emailEl.textContent = email;
     }
   } catch (e) {
     await supabase.auth.signOut();
@@ -34,7 +39,7 @@ async function loadSession() {
 }
 
 function setupLogout() {
-  const logout = document.getElementById('logout-link');
+  const logout = document.getElementById('logout-link') || document.getElementById('logout-button');
   if (!logout) return;
   logout.addEventListener('click', (e) => {
     e.preventDefault();

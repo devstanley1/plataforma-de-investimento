@@ -139,6 +139,34 @@ a {
 .site-nav a:hover {
   background-color: var(--gray-100);
 }
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.top-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--blue-50);
+  color: var(--blue-900);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--blue-100);
+}
+.top-action:hover {
+  background-color: var(--blue-100);
+}
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Spacing */
 .p-2 { padding: 0.5rem; }
@@ -296,6 +324,10 @@ a {
   }
 
   .site-nav {
+    width: 100%;
+  }
+
+  .top-actions {
     width: 100%;
   }
 }

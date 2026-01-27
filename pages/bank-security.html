@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meu banco e senha - Plataforma de Investimento</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <header class="bg-white border-b border-gray-200">
+      <div class="site-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-semibold text-gray-900">Investment Platform</h1>
+        <nav class="top-actions text-sm">
+          <a class="top-action" href="#">Suporte online</a>
+          <a class="top-action" href="#">Grupo</a>
+          <a class="top-action" href="#">Recargas</a>
+          <a class="top-action" href="#">Retiradas</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="page-shell">
+      <main class="page-content">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 class="text-2xl font-bold text-gray-900">Meu banco e senha</h2>
+          <p class="mt-2 text-gray-600">Gerencie seus dados bancários e senhas de acesso.</p>
+
+          <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 text-sm">Meu banco</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm">Alterar senha de login</button>
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-3 text-sm">Alterar senha de saque</button>
+            </div>
+          </section>
+
+          <section class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-medium text-gray-900">Dados bancários</h3>
+            <p class="mt-2 text-sm text-gray-600">Preencha seus dados para receber depósitos e saques com segurança.</p>
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Banco</label>
+                <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="Nome do banco" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Agência</label>
+                <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0001" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Conta</label>
+                <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="000123-4" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">PIX</label>
+                <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="chave@pix.com" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Salvar dados</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Menu principal">
+      <a class="bottom-nav-link" href="dashboard.html">🏠<span>Dashboard</span></a>
+      <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
+      <a class="bottom-nav-link" href="investments.html">💼<span>Investimentos</span></a>
+      <a class="bottom-nav-link" href="transactions.html">🧾<span>Transações</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Convidar</span></a>
+      <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/supabase.js"></script>
+    <script src="../assets/session.js"></script>
+  </body>
+</html>

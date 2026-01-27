@@ -22,13 +22,16 @@ module.exports = async (req, res) => {
     return sendJson(res, 500, { message: 'Supabase não configurado.' });
   }
 
+  const referralCode = `CONV-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+
   const { data, error } = await supabase.auth.signUp({
     email: String(email).toLowerCase(),
     password: String(password),
     options: {
       data: {
         name: String(name).trim(),
-        phone: phone ? String(phone).trim() : null
+        phone: phone ? String(phone).trim() : null,
+        referral_code: referralCode
       }
     }
   });

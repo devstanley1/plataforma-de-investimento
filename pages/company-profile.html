@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Convidar - Plataforma de Investimento</title>
+    <title>Perfil da empresa - Plataforma de Investimento</title>
     <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="min-h-screen bg-gray-50">
@@ -22,47 +22,44 @@
     <div class="page-shell">
       <main class="page-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 class="text-2xl font-bold text-gray-900">Convidar amigos</h2>
-          <p class="mt-2 text-gray-600">Compartilhe seu código e ganhe bônus por cada indicação.</p>
+          <h2 class="text-2xl font-bold text-gray-900">Perfil da empresa</h2>
+          <p class="mt-2 text-gray-600">Conheça mais sobre nossa operação e compromisso com os usuários.</p>
 
           <section class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <p class="text-sm text-gray-500">Seu código</p>
-            <p class="text-2xl font-bold text-gray-900 mt-2" id="referral-code">CONV-XXXXXX</p>
-            <div class="mt-4 flex flex-wrap gap-3">
-              <button id="share-code" class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">Compartilhar código</button>
-            </div>
+            <h3 class="text-lg font-medium text-gray-900">Quem somos</h3>
+            <p class="mt-2 text-sm text-gray-600">
+              Somos uma plataforma focada em conectar usuários a oportunidades de produtos físicos com retorno diário,
+              oferecendo transparência, suporte dedicado e processos seguros.
+            </p>
           </section>
 
           <section class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <p class="text-sm text-gray-500">Link de convite</p>
-            <p class="mt-2 text-sm text-gray-900" id="referral-link">https://seusite.com/pages/register.html?ref=CONV-XXXXXX</p>
-            <div class="mt-4 flex flex-wrap gap-3">
-              <button id="share-link" class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-2 text-sm">Compartilhar link</button>
-            </div>
+            <h3 class="text-lg font-medium text-gray-900">Nossa missão</h3>
+            <p class="mt-2 text-sm text-gray-600">
+              Democratizar o acesso a oportunidades com fluxo diário de lucro, garantindo uma experiência simples e confiável.
+            </p>
           </section>
 
           <section class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-lg font-medium text-gray-900">Bônus de convite</h3>
-            <ul class="mt-3 text-sm text-gray-600 space-y-1">
-              <li>• Bônus de boas-vindas para cada amigo que se cadastra com seu código.</li>
-              <li>• Comissão extra quando o indicado realiza sua primeira compra.</li>
-              <li>• Quanto mais amigos, maiores seus ganhos diários.</li>
-            </ul>
+            <h3 class="text-lg font-medium text-gray-900">Suporte e comunidade</h3>
+            <p class="mt-2 text-sm text-gray-600">
+              Disponibilizamos canais de suporte online, grupo exclusivo e atualizações constantes para nossos usuários.
+            </p>
           </section>
         </div>
       </main>
     </div>
+
     <nav class="bottom-nav" aria-label="Menu principal">
       <a class="bottom-nav-link" href="dashboard.html">🏠<span>Dashboard</span></a>
       <a class="bottom-nav-link" href="products.html">📊<span>Produtos</span></a>
       <a class="bottom-nav-link" href="investments.html">💼<span>Investimentos</span></a>
       <a class="bottom-nav-link" href="transactions.html">🧾<span>Transações</span></a>
-      <a class="bottom-nav-link is-active" href="referrals.html">🤝<span>Convidar</span></a>
+      <a class="bottom-nav-link" href="referrals.html">🤝<span>Convidar</span></a>
       <a class="bottom-nav-link" href="profile.html">⚙<span>Perfil</span></a>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/supabase.js"></script>
     <script src="../assets/session.js"></script>
-    <script src="../assets/referrals.js"></script>
   </body>
 </html>
