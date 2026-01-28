@@ -81,6 +81,7 @@ module.exports = async (req, res) => {
       payload?.data?.amount?.value ||
       payload?.data?.amount ||
       payload?.amount ||
+      payload?.transaction?.amount ||
       payload?.data?.value ||
       payload?.payment?.amount ||
       payload?.data?.payment?.amount ||
