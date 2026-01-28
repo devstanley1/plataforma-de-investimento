@@ -65,6 +65,7 @@ module.exports = async (req, res) => {
       payload?.data?.user_id ||
       payload?.data?.client?.userId ||
       payload?.data?.client?.user_id ||
+      payload?.trackProps?.userId ||
       null;
 
     // Buscar userId em transaction.identifier ou client.id se não encontrado
