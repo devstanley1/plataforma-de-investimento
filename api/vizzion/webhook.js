@@ -16,8 +16,17 @@ module.exports = async (req, res) => {
 
   const payload = await readJsonBody(req);
   const expectedToken = process.env.VIZZION_WEBHOOK_TOKEN;
+  const headerToken =
+    req?.headers?.['x-webhook-token'] ||
+    req?.headers?.['x-vizzion-token'] ||
+    req?.headers?.['x-callback-token'] ||
+    req?.headers?.authorization ||
+    req?.headers?.Authorization ||
+    '';
+  const normalizedHeaderToken = String(headerToken || '').replace(/^Bearer\s+/i, '').trim();
+  const payloadToken = String(payload?.token || '').trim();
 
-  if (expectedToken && payload?.token !== expectedToken) {
+  if (expectedToken && expectedToken !== normalizedHeaderToken && expectedToken !== payloadToken) {
     return sendJson(res, 401, { message: 'Token inválido.' });
   }
 
@@ -33,16 +42,63 @@ module.exports = async (req, res) => {
     }
   }
 
-  const statusRaw = payload?.status || payload?.data?.status || payload?.payment?.status || '';
+  const statusRaw =
+    payload?.status ||
+    payload?.data?.status ||
+    payload?.payment?.status ||
+    payload?.data?.payment?.status ||
+    payload?.data?.pix?.status ||
+    '';
   const eventRaw = payload?.event || payload?.type || '';
   const normalized = `${statusRaw || eventRaw}`.toUpperCase();
-  const isPaid = ['PAID', 'COMPLETED', 'CONFIRMED', 'APPROVED', 'SUCCESS', 'RECEIVED'].some((value) => normalized.includes(value));
+  const isPaid = ['PAID', 'PAID_OUT', 'PAIDOUT', 'COMPLETED', 'CONFIRMED', 'APPROVED', 'SUCCESS', 'RECEIVED', 'SETTLED', 'PAGO']
+    .some((value) => normalized.includes(value));
 
   if (supabase && isPaid) {
-    const metadata = payload?.metadata || payload?.data?.metadata || payload?.pix?.metadata || {};
-    const userId = metadata?.userId || metadata?.user_id || payload?.userId || payload?.user_id || null;
-    const amount = Number(payload?.data?.amount || payload?.amount || payload?.data?.value || 0);
-    const reference = payload?.data?.id || payload?.id || payload?.payment?.id || payload?.data?.reference || null;
+    const metadata =
+      payload?.metadata ||
+      payload?.data?.metadata ||
+      payload?.pix?.metadata ||
+      payload?.data?.pix?.metadata ||
+      payload?.payment?.metadata ||
+      payload?.data?.payment?.metadata ||
+      payload?.data?.client?.metadata ||
+      {};
+
+    const userId =
+      metadata?.userId ||
+      metadata?.user_id ||
+      payload?.userId ||
+      payload?.user_id ||
+      payload?.data?.userId ||
+      payload?.data?.user_id ||
+      payload?.data?.client?.userId ||
+      payload?.data?.client?.user_id ||
+      null;
+
+    const rawAmount =
+      payload?.data?.amount?.value ||
+      payload?.data?.amount ||
+      payload?.amount ||
+      payload?.data?.value ||
+      payload?.payment?.amount ||
+      payload?.data?.payment?.amount ||
+      payload?.pix?.amount ||
+      payload?.data?.pix?.amount ||
+      payload?.data?.paidAmount ||
+      payload?.data?.receivedAmount ||
+      0;
+
+    const amount = Number(String(rawAmount).replace(',', '.'));
+    const reference =
+      payload?.data?.id ||
+      payload?.id ||
+      payload?.payment?.id ||
+      payload?.data?.payment?.id ||
+      payload?.data?.reference ||
+      payload?.data?.identifier ||
+      payload?.data?.pix?.identifier ||
+      null;
 
     if (userId && Number.isFinite(amount) && amount > 0) {
       try {
