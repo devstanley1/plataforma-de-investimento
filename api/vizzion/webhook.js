@@ -73,6 +73,10 @@ module.exports = async (req, res) => {
       userId = payload?.transaction?.identifier || payload?.client?.id || null;
     }
 
+    // LOGS PARA DEPURAÇÃO
+    console.log('Payload recebido:', JSON.stringify(payload));
+    console.log('UserId extraído:', userId);
+
     const rawAmount =
       payload?.data?.amount?.value ||
       payload?.data?.amount ||
