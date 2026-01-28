@@ -16,17 +16,8 @@ module.exports = async (req, res) => {
 
   const payload = await readJsonBody(req);
   const expectedToken = process.env.VIZZION_WEBHOOK_TOKEN;
-  const headerToken =
-    req?.headers?.['x-webhook-token'] ||
-    req?.headers?.['x-vizzion-token'] ||
-    req?.headers?.['x-callback-token'] ||
-    req?.headers?.authorization ||
-    req?.headers?.Authorization ||
-    '';
-  const normalizedHeaderToken = String(headerToken || '').replace(/^Bearer\s+/i, '').trim();
   const payloadToken = String(payload?.token || '').trim();
-
-  if (expectedToken && expectedToken !== normalizedHeaderToken && expectedToken !== payloadToken) {
+  if (expectedToken && expectedToken !== payloadToken) {
     return sendJson(res, 401, { message: 'Token inválido.' });
   }
 
@@ -65,7 +56,7 @@ module.exports = async (req, res) => {
       payload?.data?.client?.metadata ||
       {};
 
-    const userId =
+    let userId =
       metadata?.userId ||
       metadata?.user_id ||
       payload?.userId ||
@@ -75,6 +66,11 @@ module.exports = async (req, res) => {
       payload?.data?.client?.userId ||
       payload?.data?.client?.user_id ||
       null;
+
+    // Buscar userId em transaction.identifier ou client.id se não encontrado
+    if (!userId) {
+      userId = payload?.transaction?.identifier || payload?.client?.id || null;
+    }
 
     const rawAmount =
       payload?.data?.amount?.value ||
