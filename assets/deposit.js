@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const amountInput = document.getElementById('deposit-amount');
   const cpfInput = document.getElementById('deposit-cpf');
   const errorEl = document.getElementById('deposit-error');
+  const successEl = document.getElementById('deposit-success');
   const pixBox = document.getElementById('pix-box');
   const pixCode = document.getElementById('pix-code');
   const pixAmount = document.getElementById('pix-amount');
@@ -30,6 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const setError = (message) => {
     errorEl.textContent = message || '';
     errorEl.style.display = message ? 'block' : 'none';
+    if (successEl) successEl.style.display = 'none';
+  };
+
+  const setSuccess = (message) => {
+    if (successEl) {
+      successEl.textContent = message || 'Pagamento aprovado! Seu saldo foi atualizado.';
+      successEl.style.display = message ? 'block' : 'none';
+    }
+    if (errorEl) errorEl.style.display = 'none';
   };
 
   if (copyBtn && pixCode) {
@@ -159,5 +169,43 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       setError(error.message || 'Erro ao gerar PIX.');
     }
+
+    // Checagem periódica do saldo para mostrar "pagamento aprovado"
+    let lastBalance = null;
+    let checkInterval = null;
+    async function checkPaymentApproved() {
+      try {
+        const supabase = await getSupabaseClient();
+        const { data, error } = await supabase.auth.getUser();
+        const userId = data?.user?.id;
+        if (!userId) return;
+        const { data: wallet } = await supabase
+          .from('wallets')
+          .select('balance')
+          .eq('user_id', userId)
+          .maybeSingle();
+        const balance = Number(wallet?.balance || 0);
+        if (lastBalance !== null && balance > lastBalance) {
+          setSuccess('Pagamento aprovado! Seu saldo foi atualizado.');
+          clearInterval(checkInterval);
+        }
+        lastBalance = balance;
+      } catch {}
+    }
+    // Inicia checagem automática após gerar PIX
+    try {
+      const supabase = await getSupabaseClient();
+      const { data, error } = await supabase.auth.getUser();
+      const userId = data?.user?.id;
+      if (userId) {
+        const { data: wallet } = await supabase
+          .from('wallets')
+          .select('balance')
+          .eq('user_id', userId)
+          .maybeSingle();
+        lastBalance = Number(wallet?.balance || 0);
+        checkInterval = setInterval(checkPaymentApproved, 5000);
+      }
+    } catch {}
   });
 });
