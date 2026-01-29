@@ -23,4 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Integração para salvar dados bancários
+  const bankForm = document.getElementById('bank-form');
+  if (bankForm) {
+    const saveBtn = bankForm.querySelector('button');
+    const inputs = bankForm.querySelectorAll('input,select');
+    const statusEl = document.createElement('p');
+    statusEl.style.marginTop = '8px';
+    statusEl.style.fontSize = '0.95em';
+    bankForm.appendChild(statusEl);
+    saveBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      const [nome, cpfCnpj, banco, agencia, conta, tipoConta, pixKey] = Array.from(inputs).map(i => i.value);
+      try {
+        const supabase = await getSupabaseClient();
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData?.session?.access_token;
+        const response = await fetch('/api/bank', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+          },
+          body: JSON.stringify({ nome, cpfCnpj, banco, agencia, conta, tipoConta, pixKey })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.message || 'Erro ao salvar dados bancários.');
+        statusEl.style.color = 'green';
+        statusEl.textContent = 'Dados bancários salvos com sucesso!';
+      } catch (err) {
+        statusEl.style.color = 'red';
+        statusEl.textContent = err.message || 'Erro ao salvar dados bancários.';
+      }
+    });
+  }
 });
