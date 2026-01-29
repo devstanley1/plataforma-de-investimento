@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
     }
   }
 
+
   const statusRaw =
     payload?.status ||
     payload?.data?.status ||
@@ -44,6 +45,20 @@ module.exports = async (req, res) => {
   const normalized = `${statusRaw || eventRaw}`.toUpperCase();
   const isPaid = ['PAID', 'PAID_OUT', 'PAIDOUT', 'COMPLETED', 'CONFIRMED', 'APPROVED', 'SUCCESS', 'RECEIVED', 'SETTLED', 'PAGO']
     .some((value) => normalized.includes(value));
+
+  // Atualizar status do saque se for evento de saque concluído
+  const withdrawExternalId = payload?.data?.external_id || payload?.external_id || payload?.identifier || payload?.data?.id || null;
+  if (withdrawExternalId && (eventRaw === 'TRANSFER_COMPLETED' || normalized.includes('COMPLETED'))) {
+    try {
+      await supabase
+        .from('withdraw_requests')
+        .update({ status: 'PAGO', webhook_payload: payload })
+        .eq('id', withdrawExternalId);
+    } catch (e) {
+      // Apenas logar, não interrompe o fluxo
+      console.error('Erro ao atualizar status do saque via webhook:', e.message);
+    }
+  }
 
   if (supabase && isPaid) {
     const metadata =

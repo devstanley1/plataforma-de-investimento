@@ -2,6 +2,7 @@ const { supabase } = require('../../_supabase');
 const { handleCors, sendJson, readJsonBody } = require('../../_utils');
 
 async function processWithdraw(id, approve, reason = null) {
+
   // Buscar a solicitação
   const { data: req, error } = await supabase
     .from('withdraw_requests')
@@ -9,6 +10,9 @@ async function processWithdraw(id, approve, reason = null) {
     .eq('id', id)
     .single();
   if (error || !req) return { error: error?.message || 'Solicitação não encontrada.' };
+
+  // LOG: dados da solicitação
+  console.log('[VIZZION][APROVACAO] Saque aprovado:', { id, req });
 
   if (!approve) {
     // Reprovar
@@ -19,6 +23,7 @@ async function processWithdraw(id, approve, reason = null) {
     if (updateError) return { error: updateError.message };
     return { ok: true };
   }
+
 
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
@@ -37,6 +42,7 @@ async function processWithdraw(id, approve, reason = null) {
   let vizzion_response = null;
   let status = 'PAID';
   try {
+    console.log('[VIZZION][APROVACAO] Enviando para VizzionPay:', { payoutUrl, publicKey, payload });
     const response = await fetch(payoutUrl, {
       method: 'POST',
       headers: {
@@ -47,10 +53,12 @@ async function processWithdraw(id, approve, reason = null) {
       body: JSON.stringify(payload)
     });
     vizzion_response = await response.json();
+    console.log('[VIZZION][APROVACAO] Resposta VizzionPay:', vizzion_response);
     if (!response.ok) status = 'FAILED';
   } catch (e) {
     status = 'FAILED';
     vizzion_response = { error: e.message };
+    console.error('[VIZZION][APROVACAO] Erro ao enviar para VizzionPay:', e);
   }
   await supabase
     .from('withdraw_requests')
