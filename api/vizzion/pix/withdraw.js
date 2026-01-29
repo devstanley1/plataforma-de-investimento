@@ -77,6 +77,7 @@ module.exports = async (req, res) => {
 
     return sendJson(res, 201, data);
   } catch (error) {
-    return sendJson(res, 500, { message: 'Falha ao comunicar com a Vizzion Pay.' });
+    console.error('Erro ao comunicar com a Vizzion Pay:', error);
+    return sendJson(res, 500, { message: 'Falha ao comunicar com a Vizzion Pay.', error: error?.message || error });
   }
 };
