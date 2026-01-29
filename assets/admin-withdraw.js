@@ -3,12 +3,24 @@
 const SUPABASE_URL = 'https://hnbwamaqdmfdwaqtyxkc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs';
 
+
 (async () => {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  const session = supabase.auth.session ? await supabase.auth.session() : null;
-  const user = session?.user;
-  if (!user) {
+  // Recuperar token salvo pelo login
+  const sessionStr = localStorage.getItem('session');
+  let access_token = null;
+  try {
+    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
+  } catch { access_token = null; }
+  if (!access_token) {
+    alert('Faça login como administrador.');
+    window.location.href = '/pages/admin-login.html';
+    return;
+  }
+  // Buscar usuário autenticado pelo token
+  const { data: userData, error: userError } = await supabase.auth.getUser(access_token);
+  if (userError || !userData?.user) {
     alert('Faça login como administrador.');
     window.location.href = '/pages/admin-login.html';
     return;
@@ -17,7 +29,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('is_admin')
-    .eq('id', user.id)
+    .eq('id', userData.user.id)
     .single();
   if (profileError || !profile?.is_admin) {
     alert('Acesso restrito a administradores.');
@@ -30,7 +42,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
   // Buscar solicitações de saque pendentes
   let { data, error } = await fetch('/api/admin/withdraw-requests', {
-    headers: { 'Authorization': `Bearer ${session.access_token}` }
+    headers: { 'Authorization': `Bearer ${access_token}` }
   }).then(r => r.json());
   if (error || !data) {
     tbody.innerHTML = `<tr><td colspan="6">Erro ao carregar: ${error || 'desconhecido'}</td></tr>`;
