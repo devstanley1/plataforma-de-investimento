@@ -102,7 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         email: userEmail || null,
         cpf: cpfDigits
       },
-      metadata: { source: 'site' }
+      metadata: { source: 'site' },
+      password: passwordInput?.value
     };
 
     try {

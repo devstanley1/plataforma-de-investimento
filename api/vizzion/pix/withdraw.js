@@ -4,6 +4,8 @@ function normalizeDocument(value) {
   return String(value || '').replace(/\D/g, '');
 }
 
+const { supabase } = require('../../_supabase');
+
 module.exports = async (req, res) => {
   if (handleCors(req, res)) return;
 
@@ -30,6 +32,33 @@ module.exports = async (req, res) => {
   const document = normalizeDocument(body.document || body.cpf || body?.client?.cpf);
   if (!document || document.length !== 11) {
     return sendJson(res, 400, { message: 'Documento (CPF) obrigatório.' });
+  }
+
+  // Validação da senha de retirada
+  const password = body.password;
+  if (!password) {
+    return sendJson(res, 400, { message: 'Senha de retirada obrigatória.' });
+  }
+
+  // Recuperar usuário autenticado pelo token de sessão
+  const authHeader = req.headers['authorization'] || req.headers['Authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return sendJson(res, 401, { message: 'Token de autenticação ausente.' });
+  }
+  const accessToken = authHeader.replace('Bearer ', '');
+  const { data: userData, error: userError } = await supabase.auth.getUser(accessToken);
+  if (userError || !userData?.user) {
+    return sendJson(res, 401, { message: 'Usuário não autenticado.' });
+  }
+  const userEmail = userData.user.email;
+
+  // Tentar autenticar o usuário usando o e-mail e a senha informada
+  const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+    email: userEmail,
+    password: String(password)
+  });
+  if (loginError || !loginData?.user) {
+    return sendJson(res, 401, { message: 'Senha de retirada incorreta.' });
   }
 
   const identifier = body.identifier || `PIX-OUT-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase();
