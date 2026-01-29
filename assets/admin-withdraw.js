@@ -12,7 +12,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
   const user = session?.user;
   if (!user) {
     alert('Faça login como administrador.');
-    window.location.href = '/pages/login.html';
+    window.location.href = '/pages/admin-login.html';
     return;
   }
   // Buscar perfil do usuário
@@ -23,7 +23,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
     .single();
   if (profileError || !profile?.is_admin) {
     alert('Acesso restrito a administradores.');
-    window.location.href = '/pages/login.html';
+    window.location.href = '/pages/admin-login.html';
     return;
   }
 

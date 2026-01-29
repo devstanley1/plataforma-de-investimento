@@ -6,10 +6,59 @@
     <title>Painel de Saques - Admin</title>
     <link rel="stylesheet" href="../../assets/styles.css" />
     <style>
-      .admin-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
-      .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 8px; }
-      .admin-table th { background: #f3f3f3; }
-      .actions button { margin-right: 0.5rem; }
+      body {
+        background: radial-gradient(circle at top, #1a1a1a 0%, #0b0b0b 60%);
+        color: var(--netflix-text);
+      }
+      header {
+        background: var(--netflix-black);
+        border-bottom: 2px solid var(--netflix-red);
+      }
+      h1 {
+        color: var(--netflix-red);
+        font-family: 'Netflix Sans', Arial, sans-serif;
+        font-size: 2rem;
+        letter-spacing: 1px;
+      }
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+        background: var(--netflix-card);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px #000a;
+      }
+      .admin-table th, .admin-table td {
+        border: 1px solid var(--netflix-border);
+        padding: 10px 8px;
+        color: var(--netflix-text);
+      }
+      .admin-table th {
+        background: var(--netflix-red);
+        color: #fff;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+      .admin-table tr:nth-child(even) {
+        background: var(--netflix-slate);
+      }
+      .admin-table tr:nth-child(odd) {
+        background: var(--netflix-card);
+      }
+      .actions button {
+        margin-right: 0.5rem;
+        background: var(--netflix-red);
+        color: #fff;
+        border-radius: 4px;
+        padding: 0.4rem 1rem;
+        border: none;
+        font-weight: bold;
+        transition: background 0.2s;
+      }
+      .actions button:hover {
+        background: var(--netflix-red-dark);
+      }
     </style>
   </head>
   <body class="min-h-screen bg-gray-50">
