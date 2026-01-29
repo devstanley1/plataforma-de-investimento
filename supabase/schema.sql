@@ -22,6 +22,7 @@ create table if not exists public.profiles (
   name text,
   phone text,
   is_email_verified boolean default false,
+  is_admin boolean default false,
   kyc_status text default 'PENDING',
   referral_code_id uuid,
   created_at timestamptz default now(),

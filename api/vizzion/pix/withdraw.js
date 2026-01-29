@@ -61,52 +61,32 @@ module.exports = async (req, res) => {
     return sendJson(res, 401, { message: 'Senha de retirada incorreta.' });
   }
 
-  const identifier = body.identifier || `PIX-OUT-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`.toUpperCase();
   const pixKey = body.pixKey || document;
   const pixKeyType = body.pixKeyType || 'CPF';
 
-  const payload = {
-    identifier,
-    amount,
-    document,
-    cpf: document,
-    pixKey,
-    pixKeyType,
-    client: {
-      name: body?.client?.name || 'Investidor Netflix',
-      phone: body?.client?.phone || '+55 00 00000-0000',
-      email: body?.client?.email || null,
-      cpf: document,
-      document,
-      documentNumber: document,
-      documentType: 'CPF'
-    },
-    metadata: body.metadata || { source: 'site' }
-  };
+  // Registrar solicitação de saque na tabela withdraw_requests
+  const { data: withdrawData, error: withdrawError } = await supabase
+    .from('withdraw_requests')
+    .insert([
+      {
+        user_id: userData.user.id,
+        amount,
+        currency: 'BRL',
+        pix_key: pixKey,
+        pix_key_type: pixKeyType,
+        document,
+        status: 'PENDING',
+      }
+    ])
+    .select()
+    .single();
 
-  try {
-    const response = await fetch(payoutUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-public-key': publicKey,
-        'x-secret-key': secretKey
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return sendJson(res, response.status, {
-        message: data?.message || 'Erro ao solicitar retirada.',
-        details: data || null
-      });
-    }
-
-    return sendJson(res, 201, data);
-  } catch (error) {
-    console.error('Erro ao comunicar com a Vizzion Pay:', error);
-    return sendJson(res, 500, { message: 'Falha ao comunicar com a Vizzion Pay.', error: error?.message || error });
+  if (withdrawError) {
+    return sendJson(res, 500, { message: 'Erro ao registrar solicitação de saque.', error: withdrawError.message });
   }
+
+  return sendJson(res, 201, {
+    message: 'Solicitação de saque registrada e aguardando aprovação.',
+    withdraw_request: withdrawData
+  });
 };

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Painel de Saques - Admin</title>
+    <link rel="stylesheet" href="../../assets/styles.css" />
+    <style>
+      .admin-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+      .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 8px; }
+      .admin-table th { background: #f3f3f3; }
+      .actions button { margin-right: 0.5rem; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <header class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold">Painel de Saques - Admin</h1>
+        <a href="/pages/dashboard.html">Voltar ao Dashboard</a>
+      </div>
+    </header>
+    <main class="max-w-4xl mx-auto px-4 py-8">
+      <h2 class="text-lg font-semibold mb-4">Solicitações de Saque Pendentes</h2>
+      <table class="admin-table" id="withdraw-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Valor</th>
+            <th>Chave Pix</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="withdraw-body">
+          <tr><td colspan="6">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <script src="../../assets/admin-withdraw.js"></script>
+  </body>
+</html>
