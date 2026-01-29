@@ -1,8 +1,8 @@
 // admin-login.js
 // Login apenas para o usuário admin especificado
 
-const SUPABASE_URL = window.SUPABASE_URL || localStorage.getItem('SUPABASE_URL');
-const SUPABASE_KEY = window.SUPABASE_ANON_KEY || localStorage.getItem('SUPABASE_ANON_KEY');
+const SUPABASE_URL = window.SUPABASE_URL || localStorage.getItem('https://hnbwamaqdmfdwaqtyxkc.supabase.co');
+const SUPABASE_KEY = window.SUPABASE_ANON_KEY || localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs');
 
 async function loginAdmin(email, password) {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
