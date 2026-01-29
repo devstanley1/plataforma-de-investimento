@@ -1,12 +1,10 @@
-// admin-withdraw.js
-// Exige autenticação de admin (exemplo simples, ajuste conforme seu controle de admin)
 
-
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+// Defina diretamente os valores reais do seu Supabase:
+const SUPABASE_URL = 'https://hnbwamaqdmfdwaqtyxkc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs';
 
 (async () => {
-  const SUPABASE_URL = window.SUPABASE_URL || localStorage.getItem('SUPABASE_URL');
-  const SUPABASE_KEY = window.SUPABASE_ANON_KEY || localStorage.getItem('SUPABASE_ANON_KEY');
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   const session = supabase.auth.session ? await supabase.auth.session() : null;
   const user = session?.user;
