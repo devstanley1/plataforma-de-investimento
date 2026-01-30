@@ -19,7 +19,7 @@ async function processWithdraw(id) {
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1';
   const payload = {
     identifier: req.id,
     amount: req.amount,

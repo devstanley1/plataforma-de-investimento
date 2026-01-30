@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
 
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1';
 
   if (!publicKey || !secretKey) {
     return sendJson(res, 500, { message: 'Vizzion Pay não configurada.' });
