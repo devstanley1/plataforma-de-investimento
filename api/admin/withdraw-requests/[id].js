@@ -3,13 +3,17 @@ const { handleCors, sendJson, readJsonBody } = require('../../_utils');
 
 async function processWithdraw(id, approve, reason = null) {
 
+
   // Buscar a solicitação
   const { data: req, error } = await supabase
     .from('withdraw_requests')
     .select('*')
     .eq('id', id)
     .single();
-  if (error || !req) return { error: error?.message || 'Solicitação não encontrada.' };
+  if (error || !req) {
+    console.error('[VIZZION][APROVACAO][ERRO] Solicitação não encontrada:', { id, error });
+    return { error: error?.message || 'Solicitação não encontrada.' };
+  }
 
   // LOG: dados da solicitação
   console.log('[VIZZION][APROVACAO] Saque aprovado:', { id, req });
@@ -20,7 +24,11 @@ async function processWithdraw(id, approve, reason = null) {
       .from('withdraw_requests')
       .update({ status: 'REJECTED', admin_reason: reason })
       .eq('id', id);
-    if (updateError) return { error: updateError.message };
+    if (updateError) {
+      console.error('[VIZZION][APROVACAO][ERRO] Falha ao reprovar saque:', { id, updateError });
+      return { error: updateError.message };
+    }
+    console.log('[VIZZION][APROVACAO] Saque reprovado com sucesso:', { id });
     return { ok: true };
   }
 
@@ -60,10 +68,20 @@ async function processWithdraw(id, approve, reason = null) {
     vizzion_response = { error: e.message };
     console.error('[VIZZION][APROVACAO] Erro ao enviar para VizzionPay:', e);
   }
-  await supabase
-    .from('withdraw_requests')
-    .update({ status, vizzion_response })
-    .eq('id', id);
+  try {
+    const { error: updateError } = await supabase
+      .from('withdraw_requests')
+      .update({ status, vizzion_response })
+      .eq('id', id);
+    if (updateError) {
+      console.error('[VIZZION][APROVACAO][ERRO] Falha ao atualizar status do saque:', { id, updateError });
+      return { error: updateError.message };
+    }
+    console.log('[VIZZION][APROVACAO] Status do saque atualizado com sucesso:', { id, status });
+  } catch (e) {
+    console.error('[VIZZION][APROVACAO][ERRO] Exceção ao atualizar status do saque:', { id, error: e.message });
+    return { error: e.message };
+  }
   return { ok: true, status, vizzion_response };
 }
 
