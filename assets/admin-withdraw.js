@@ -72,15 +72,41 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 window.aprovarSaque = async function(id) {
   if (!confirm('Deseja aprovar este saque?')) return;
-  await fetch(`/api/admin/withdraw-requests/${id}/approve`, { method: 'POST' });
+  const sessionStr = localStorage.getItem('session');
+  let access_token = null;
+  try {
+    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
+  } catch { access_token = null; }
+  if (!access_token) {
+    alert('Faça login como administrador.');
+    window.location.href = '/pages/admin-login.html';
+    return;
+  }
+  await fetch(`/api/admin/withdraw-requests/${id}/approve`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${access_token}` }
+  });
   location.reload();
 };
 window.reprovarSaque = async function(id) {
   const motivo = prompt('Motivo da reprovação:');
   if (!motivo) return;
+  const sessionStr = localStorage.getItem('session');
+  let access_token = null;
+  try {
+    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
+  } catch { access_token = null; }
+  if (!access_token) {
+    alert('Faça login como administrador.');
+    window.location.href = '/pages/admin-login.html';
+    return;
+  }
   await fetch(`/api/admin/withdraw-requests/${id}/reject`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    },
     body: JSON.stringify({ reason: motivo })
   });
   location.reload();
