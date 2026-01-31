@@ -3,16 +3,16 @@
 const SUPABASE_URL = 'https://hnbwamaqdmfdwaqtyxkc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs';
 
+let supabaseClient; // Declare supabaseClient in a broader scope
 
 (async () => {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  // Recuperar token salvo pelo login
-  const sessionStr = localStorage.getItem('session');
-  let access_token = null;
-  try {
-    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
-  } catch { access_token = null; }
+  supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY); // Assign to the broader scope variable
+
+  // Get token from Supabase session
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  const access_token = sessionData?.session?.access_token;
+
   if (!access_token) {
     alert('Faça login como administrador.');
     window.location.href = '/pages/admin-login.html';
@@ -75,11 +75,12 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 window.aprovarSaque = async function (id) {
   if (!confirm('Deseja aprovar este saque?')) return;
-  const sessionStr = localStorage.getItem('session');
-  let access_token = null;
-  try {
-    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
-  } catch { access_token = null; }
+
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data: sessionData } = await supabase.auth.getSession();
+  const access_token = sessionData?.session?.access_token;
+
   if (!access_token) {
     alert('Faça login como administrador.');
     window.location.href = '/pages/admin-login.html';
@@ -94,11 +95,12 @@ window.aprovarSaque = async function (id) {
 window.reprovarSaque = async function (id) {
   const motivo = prompt('Motivo da reprovação:');
   if (!motivo) return;
-  const sessionStr = localStorage.getItem('session');
-  let access_token = null;
-  try {
-    access_token = sessionStr ? JSON.parse(sessionStr).access_token : null;
-  } catch { access_token = null; }
+
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data: sessionData } = await supabase.auth.getSession();
+  const access_token = sessionData?.session?.access_token;
+
   if (!access_token) {
     alert('Faça login como administrador.');
     window.location.href = '/pages/admin-login.html';
