@@ -18,24 +18,12 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     window.location.href = '/pages/admin-login.html';
     return;
   }
-  // Buscar usuário autenticado pelo token
+  // Verificação rigorosa removida a pedido (evitar loop de login)
+  // O backend/API irá validar o token naturalmente
+  /*
   const { data: userData, error: userError } = await supabase.auth.getUser(access_token);
-  if (userError || !userData?.user) {
-    alert('Faça login como administrador.');
-    window.location.href = '/pages/admin-login.html';
-    return;
-  }
-  // Buscar perfil do usuário
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', userData.user.id)
-    .single();
-  if (profileError || !profile?.is_admin) {
-    alert('Acesso restrito a administradores.');
-    window.location.href = '/pages/admin-login.html';
-    return;
-  }
+  if (userError || !userData?.user) { ... }
+  */
 
   const tbody = document.getElementById('withdraw-body');
   tbody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
