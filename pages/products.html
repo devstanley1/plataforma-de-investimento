@@ -51,94 +51,166 @@
               </div>
             </div>
 
-            <section class="mt-8">
-              <div id="products-loader" class="text-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-                <p class="mt-4 text-gray-500">Carregando catálogo...</p>
+            <section class="space-y-4 mt-8">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Série Original - Temporada 1</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 70,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 14,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 700,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 70 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm invest-button"
+                      type="button">Investir agora</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Filme Original - Lançamento</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 150,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 30,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 1.500,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 50 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm invest-button"
+                      type="button">Investir agora</button>
+                  </div>
+                </div>
               </div>
 
-              <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
-                <!-- Produtos injetados via JS -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Série Original - Nova Temporada</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 890,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 20,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 600,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Filme Original - Premiado</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 1.450,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 32,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 960,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Série Original - Top 10</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 1.980,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 45,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 1.350,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Filme Original - Blockbuster</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 2.450,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 55,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 1.650,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Série Original - Ultra HD</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 3.200,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 70,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 2.100,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Filme Original - Ação</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 3.980,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 85,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 2.550,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Série Original - Suspense</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 4.750,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 105,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 3.150,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div class="product-image">
+                    <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" />
+                  </div>
+                  <h3 class="text-lg font-medium text-gray-900">Filme Original - Clássico</h3>
+                  <p class="mt-1 text-sm text-gray-500">Licença: R$ 6.500,00</p>
+                  <p class="mt-4 text-sm text-gray-600">Retorno diário: R$ 140,00</p>
+                  <p class="text-sm text-gray-600">Retorno total: R$ 4.200,00</p>
+                  <p class="text-sm text-gray-600">Ciclo total: 30 dias</p>
+                  <div class="mt-4">
+                    <button
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-gray-300 text-gray-600 px-4 py-2 text-sm"
+                      type="button" disabled>Indisponível</button>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
         </main>
       </div>
-
-      <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        const SUPABASE_URL = 'https://hnbwamaqdmfdwaqtyxkc.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs';
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const grid = document.getElementById('products-grid');
-        const loader = document.getElementById('products-loader');
-
-        async function loadProducts() {
-          try {
-            const { data: products, error } = await supabase
-              .from('investment_products')
-              .select('*')
-              .eq('status', 'ACTIVE')
-              .order('min_investment', { ascending: true });
-
-            if (error) throw error;
-
-            if (!products || products.length === 0) {
-              grid.innerHTML = '<p class="text-center col-span-full">Nenhum produto disponível no momento.</p>';
-            } else {
-              grid.innerHTML = products.map(product => {
-                const dailyReturn = (product.min_investment * (product.nominal_rate / 100));
-                const totalReturn = product.min_investment + (dailyReturn * product.maturity_days); // Ou apenas daily * days se for juros simples sem principal
-                // Para manter compatível com o HTML anterior: "Retorno total" parecia ser (Investimento + Lucro) ou apenas Lucro?
-                // O HTML anterior dizia: Invest 70 -> Retorno Total 700. Isso é 10x!!
-                // Vou renderizar os dados do banco.
-                // Se o banco tiver taxa 20% e invest 70 -> Diario 14. Total em 70 dias = 14*70 = 980?
-                // Vou usar a lógica visual do card.
-
-                const calculatedDaily = (product.min_investment * (product.nominal_rate / 100));
-                const calculatedTotal = calculatedDaily * product.maturity_days;
-
-                return `
-              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div class="product-image mb-4">
-                  <img src="../assets/img/produtos.jpeg" alt="${product.name}" class="w-full h-48 object-cover rounded-md" loading="lazy" />
-                </div>
-                <h3 class="text-lg font-medium text-gray-900">${product.name}</h3>
-                <p class="mt-1 text-sm text-gray-500">Licença: R$ ${Number(product.min_investment).toFixed(2)}</p>
-                <div class="mt-4 space-y-1">
-                  <p class="text-sm text-gray-600">Retorno diário: <span class="font-semibold text-green-600">R$ ${calculatedDaily.toFixed(2)}</span> (${product.nominal_rate}%)</p>
-                  <p class="text-sm text-gray-600">Ciclo total: ${product.maturity_days} dias</p>
-                </div>
-                <div class="mt-4">
-                  <button onclick="window.invest('${product.id}')" class="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors bg-red-600 text-white hover:bg-red-700 px-4 py-2 text-sm invest-button" type="button">
-                    Investir agora
-                  </button>
-                </div>
-              </div>
-              `;
-              }).join('');
-            }
-          } catch (err) {
-            console.error('Erro ao carregar produtos:', err);
-            grid.innerHTML = '<p class="text-center text-red-500 col-span-full">Erro ao carregar catálogo. Tente novamente.</p>';
-          } finally {
-            loader.classList.add('hidden');
-            grid.classList.remove('hidden');
-          }
-        }
-
-        // Função global para investir (pode conectar com modal depois)
-        window.invest = (productId) => {
-          // Redirecionar ou abrir modal.
-          // O código original não tinha lógica clara, apenas botões.
-          // Vou assumir que o invest-modal.js lida com isso se eu disparar um evento ou usar classes.
-          // Mas por enquanto, apenas um alert para feedback.
-          alert('Funcionalidade de investimento será conectada ao ID: ' + productId);
-        };
-
-        loadProducts();
-      </script>
       <nav class="bottom-nav" aria-label="Menu principal">
         <a class="bottom-nav-link is-active" href="products.html">📊<span>Produtos</span></a>
         <a class="bottom-nav-link" href="transactions.html">🧾<span>Movimentações</span></a>
