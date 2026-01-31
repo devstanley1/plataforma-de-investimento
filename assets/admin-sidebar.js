@@ -130,7 +130,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Logout functionality
-  const logoutBtn = document.getElementById('logout-btn');
+  let logoutBtn = document.getElementById('logout-btn');
+
+  // If button doesn't exist (cache issue), create it dynamically
+  if (!logoutBtn) {
+    const nav = sidebar ? sidebar.querySelector('nav') : null;
+    if (nav) {
+      const logoutDiv = document.createElement('div');
+      logoutDiv.className = 'mt-6 pt-6 border-t border-zinc-800';
+      logoutDiv.innerHTML = `
+        <button id="logout-btn" class="group flex items-center w-full px-2 py-2 text-base font-medium rounded-md text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors">
+          <span class="mr-3">🚪</span> Sair da Conta
+        </button>
+      `;
+      nav.appendChild(logoutDiv);
+      logoutBtn = document.getElementById('logout-btn');
+    }
+  }
+
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       if (confirm('Deseja realmente sair da conta?')) {
