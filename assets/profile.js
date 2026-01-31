@@ -4,7 +4,16 @@ function formatCurrency(value) {
 
 async function loadProfileStats() {
   try {
-        .eq('user_id', userId)
+    if (window.supabaseReady) await window.supabaseReady;
+    if (!window.supabaseClient) throw new Error('Supabase não inicializado');
+    const supabase = window.supabaseClient;
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user?.id) throw new Error('Usuário não autenticado');
+    const userId = userData.user.id;
+    const { data: wallet, error: walletError } = await supabase
+      .from('wallets')
+      .select('balance')
+      .eq('user_id', userId)
       .maybeSingle();
     if (walletError) throw new Error('Erro ao buscar saldo: ' + walletError.message);
     const balance = Number(wallet?.balance || 0);

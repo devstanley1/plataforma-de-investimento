@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="mt-6 mb-2">
           <p class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Apps</p>
         </div>
+        <a href="admin-products.html" class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-300 hover:bg-black hover:text-white transition-colors ${isActive('admin-products.html')}">
+          <span class="mr-3">📺</span> Produtos
+        </a>
         <a href="admin-vips.html" class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-300 hover:bg-black hover:text-white transition-colors ${isActive('admin-vips.html')}">
           <span class="mr-3">💎</span> VIPs
         </a>

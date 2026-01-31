@@ -19,41 +19,35 @@
 
     <main class="p-6">
         <div class="max-w-7xl mx-auto">
-            <h1 class="text-3xl font-bold text-white mb-8 tracking-tight">Gerenciar VIPs (Produtos)</h1>
+            <h1 class="text-3xl font-bold text-white mb-8 tracking-tight">Gerenciar Níveis VIP</h1>
 
-            <!-- Form de Criação/Edição -->
+            <!-- Form -->
             <div class="bg-zinc-900 rounded-lg shadow-lg border border-zinc-800 p-6 mb-8">
-                <h2 class="text-xl font-semibold text-white mb-4" id="form-title">Novo Produto VIP</h2>
+                <h2 class="text-xl font-semibold text-white mb-4" id="form-title">Novo Nível VIP</h2>
                 <form id="vip-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input type="hidden" id="vip-id">
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400">Nome do Produto</label>
-                        <input type="text" id="vip-name" required placeholder="Ex: VIP 1 - Iniciante"
+                        <label class="block text-sm font-medium text-gray-400">Nome do Nível</label>
+                        <input type="text" id="vip-name" required placeholder="Ex: VIP 1"
                             class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400">Retorno Diário (%)</label>
-                        <input type="number" step="0.01" id="vip-rate" required placeholder="Ex: 2.5"
+                        <label class="block text-sm font-medium text-gray-400">Depósito Mínimo (R$)</label>
+                        <input type="number" step="0.01" id="vip-min" required placeholder="Ex: 100.00"
                             class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400">Investimento Mínimo (R$)</label>
-                        <input type="number" step="0.01" id="vip-min" required placeholder="Ex: 50.00"
+                        <label class="block text-sm font-medium text-gray-400">Bônus Diário (%)</label>
+                        <input type="number" step="0.01" id="vip-bonus" placeholder="Ex: 0.5"
                             class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400">Duração (Dias)</label>
-                        <input type="number" id="vip-days" required placeholder="Ex: 30"
-                            class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-400">Descrição</label>
-                        <input type="text" id="vip-desc" placeholder="Descrição curta para o usuário"
+                        <label class="block text-sm font-medium text-gray-400">Saques/Dia</label>
+                        <input type="number" id="vip-withdraws" placeholder="Ex: 1"
                             class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
                     </div>
 
@@ -62,28 +56,26 @@
                             class="hidden px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors">Cancelar</button>
                         <button type="submit"
                             class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded transition-colors">Salvar
-                            Produto</button>
+                            VIP</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Lista de Produtos -->
+            <!-- Lista -->
             <div class="bg-zinc-900 rounded-lg shadow-lg border border-zinc-800 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-left text-sm text-gray-400">
                         <thead class="bg-black text-xs uppercase font-medium border-b border-zinc-800">
                             <tr>
-                                <th class="px-6 py-3">Nome</th>
-                                <th class="px-6 py-3">Retorno (%)</th>
-                                <th class="px-6 py-3">Mínimo (R$)</th>
-                                <th class="px-6 py-3">Duração</th>
-                                <th class="px-6 py-3">Status</th>
+                                <th class="px-6 py-3">Nível</th>
+                                <th class="px-6 py-3">Depósito Mín (R$)</th>
+                                <th class="px-6 py-3">Bônus Diário</th>
                                 <th class="px-6 py-3 text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="vips-body" class="divide-y divide-zinc-800">
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-center">Carregando produtos...</td>
+                                <td colspan="4" class="px-6 py-4 text-center">Carregando VIPs...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,34 +96,29 @@
         const cancelBtn = document.getElementById('btn-cancel');
         let editingId = null;
 
-        // Buscar Produtos
-        async function fetchProducts() {
+        // Buscar VIPs
+        async function fetchVips() {
+            // Tenta buscar da tabela vip_levels
             const { data, error } = await supabase
-                .from('investment_products')
+                .from('vip_levels')
                 .select('*')
-                .order('min_investment', { ascending: true });
+                .order('min_deposit', { ascending: true });
 
             if (error) {
-                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">${error.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">${error.message}</td></tr>`;
                 return;
             }
 
             if (!data.length) {
-                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center">Nenhum produto cadastrado.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center">Nenhum VIP cadastrado. Use o formulário para criar.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = data.map(vip => `
           <tr class="hover:bg-zinc-800 transition-colors">
             <td class="px-6 py-4 font-bold text-white">${vip.name}</td>
-            <td class="px-6 py-4 text-green-400">${vip.nominal_rate}% / dia</td>
-            <td class="px-6 py-4">R$ ${Number(vip.min_investment).toFixed(2)}</td>
-            <td class="px-6 py-4">${vip.maturity_days} dias</td>
-            <td class="px-6 py-4">
-              <span class="px-2 py-1 text-xs rounded-full ${vip.status === 'ACTIVE' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}">
-                ${vip.status}
-              </span>
-            </td>
+            <td class="px-6 py-4">R$ ${Number(vip.min_deposit).toFixed(2)}</td>
+            <td class="px-6 py-4 text-green-400">${vip.daily_bonus_percent || 0}%</td>
             <td class="px-6 py-4 text-right space-x-2">
               <button onclick="window.editVip('${vip.id}')" class="text-blue-400 hover:text-blue-300">Editar</button>
               <button onclick="window.deleteVip('${vip.id}')" class="text-red-500 hover:text-red-400">Excluir</button>
@@ -139,29 +126,25 @@
           </tr>
         `).join('');
 
-            // Cache data for edit
-            window.productsCache = data;
+            window.vipsCache = data;
         }
 
-        // Salvar (Criar ou Atualizar)
+        // Salvar
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const payload = {
                 name: document.getElementById('vip-name').value,
-                nominal_rate: document.getElementById('vip-rate').value,
-                min_investment: document.getElementById('vip-min').value,
-                maturity_days: document.getElementById('vip-days').value,
-                description: document.getElementById('vip-desc').value,
-                type: 'fixed_income',
-                status: 'ACTIVE'
+                min_deposit: document.getElementById('vip-min').value,
+                daily_bonus_percent: document.getElementById('vip-bonus').value,
+                max_withdraw_per_day: document.getElementById('vip-withdraws').value
             };
 
             let error = null;
             if (editingId) {
-                const { error: err } = await supabase.from('investment_products').update(payload).eq('id', editingId);
+                const { error: err } = await supabase.from('vip_levels').update(payload).eq('id', editingId);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('investment_products').insert([payload]);
+                const { error: err } = await supabase.from('vip_levels').insert([payload]);
                 error = err;
             }
 
@@ -169,47 +152,44 @@
                 alert('Erro ao salvar: ' + error.message);
             } else {
                 resetForm();
-                fetchProducts();
+                fetchVips();
             }
         });
 
         // Editar
         window.editVip = (id) => {
-            const product = window.productsCache.find(p => p.id === id);
-            if (!product) return;
+            const vip = window.vipsCache.find(v => v.id === id);
+            if (!vip) return;
 
             editingId = id;
             document.getElementById('vip-id').value = id;
-            document.getElementById('vip-name').value = product.name;
-            document.getElementById('vip-rate').value = product.nominal_rate;
-            document.getElementById('vip-min').value = product.min_investment;
-            document.getElementById('vip-days').value = product.maturity_days;
-            document.getElementById('vip-desc').value = product.description || '';
+            document.getElementById('vip-name').value = vip.name;
+            document.getElementById('vip-min').value = vip.min_deposit;
+            document.getElementById('vip-bonus').value = vip.daily_bonus_percent;
+            document.getElementById('vip-withdraws').value = vip.max_withdraw_per_day;
 
-            document.getElementById('form-title').innerText = 'Editar Produto';
+            document.getElementById('form-title').innerText = 'Editar Nível VIP';
             cancelBtn.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         // Excluir
         window.deleteVip = async (id) => {
-            if (!confirm('Tem certeza que deseja excluir este produto?')) return;
-            const { error } = await supabase.from('investment_products').delete().eq('id', id);
+            if (!confirm('Tem certeza?')) return;
+            const { error } = await supabase.from('vip_levels').delete().eq('id', id);
             if (error) alert('Erro ao excluir: ' + error.message);
-            else fetchProducts();
+            else fetchVips();
         };
 
-        // Reset
         function resetForm() {
             form.reset();
             editingId = null;
-            document.getElementById('form-title').innerText = 'Novo Produto VIP';
+            document.getElementById('form-title').innerText = 'Novo Nível VIP';
             cancelBtn.classList.add('hidden');
         }
         cancelBtn.addEventListener('click', resetForm);
 
-        // Iniciar
-        fetchProducts();
+        fetchVips();
     </script>
 </body>
 
