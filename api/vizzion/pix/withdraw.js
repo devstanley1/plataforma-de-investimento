@@ -64,13 +64,26 @@ module.exports = async (req, res) => {
   const pixKey = body.pixKey || document;
   const pixKeyType = body.pixKeyType || 'CPF';
 
+  // Recuperar configurações de taxa
+  const { data: configData } = await supabase
+    .from('system_config')
+    .select('value')
+    .eq('key', 'withdraw_tax_percent')
+    .single();
+
+  const taxPercent = configData ? Number(configData.value) : 0;
+  const taxAmount = amount * (taxPercent / 100);
+  const netAmount = amount - taxAmount;
+
   // Registrar solicitação de saque na tabela withdraw_requests
   const { data: withdrawData, error: withdrawError } = await supabase
     .from('withdraw_requests')
     .insert([
       {
         user_id: userData.user.id,
-        amount,
+        amount,     // Valor bruto (debitado da carteira)
+        tax_amount: taxAmount,
+        net_amount: netAmount, // Valor líquido (enviado via PIX)
         currency: 'BRL',
         pix_key: pixKey,
         pix_key_type: pixKeyType,

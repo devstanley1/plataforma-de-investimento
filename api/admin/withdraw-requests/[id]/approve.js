@@ -29,25 +29,20 @@ async function processWithdraw(id) {
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  // Retornando para o endpoint que respondia (mesmo que com erro 401), pois outros dão 404.
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/pix/send';
+
+  // Usar o valor líquido se existir, senão o valor bruto (compatibilidade retroativa)
+  const finalAmount = req.net_amount ? Number(req.net_amount) : Number(req.amount);
 
   const payload = {
-    identifier: `${req.id}-${Date.now()}`,
-    amount: Number(req.amount),
+    identifier: `${req.id}-${Date.now()}`, // Garantir unicidade para retentativas
+    amount: finalAmount,
     document: req.document,
     cpf: req.document,
     pixKey: req.pix_key,
-    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(),
-    client: {
-      name: clientName,
-      cpf: req.document,
-      document: req.document,
-      documentType: 'CPF',
-      phone: clientPhone,
-      email: 'exemplo@email.com' // Adicionando email caso seja obrigatório (pode ser ajustado para pegar do auth)
-    },
-    metadata: { source: 'admin', original_id: req.id }
+    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(), // Normalizar para minúsculo (cpf, email, phone, random)
+    client: { name: clientName, cpf: req.document, document: req.document, documentType: 'CPF' },
+    metadata: { source: 'admin', original_id: req.id, gross_amount: req.amount }
   };
   let vizzion_response = null;
   let status = 'PAID';
