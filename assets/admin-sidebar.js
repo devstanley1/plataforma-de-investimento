@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="admin-settings.html" class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-300 hover:bg-black hover:text-white transition-colors ${isActive('admin-settings.html')}">
           <span class="mr-3">⚙️</span> Settings
         </a>
+        
+        <div class="mt-6 pt-6 border-t border-zinc-800">
+          <button id="logout-btn" class="group flex items-center w-full px-2 py-2 text-base font-medium rounded-md text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors">
+            <span class="mr-3">🚪</span> Sair da Conta
+          </button>
+        </div>
       </nav>
     </div>
 
@@ -120,6 +126,17 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 768) toggleSidebar();
       });
+    });
+  }
+
+  // Logout functionality
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      if (confirm('Deseja realmente sair da conta?')) {
+        localStorage.removeItem('session');
+        window.location.href = '/pages/admin-login.html';
+      }
     });
   }
 });
