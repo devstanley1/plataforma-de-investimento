@@ -85,7 +85,7 @@
             const { data: products, error } = await supabase
               .from('investment_products')
               .select('*')
-              .eq('status', 'ACTIVE') // Apenas ativos
+              .in('status', ['ACTIVE', 'UNAVAILABLE']) // Ativos e Indisponíveis (Visíveis)
               .order('min_investment', { ascending: true });
 
             if (error) {
@@ -104,11 +104,13 @@
                 ${products.map(product => {
               const dailyReturn = (product.min_investment * (product.nominal_rate / 100)).toFixed(2);
               const totalReturn = (Number(dailyReturn) * product.maturity_days).toFixed(2);
+              const isUnavailable = product.status === 'UNAVAILABLE';
 
               return `
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                      <div class="product-image mb-4">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${isUnavailable ? 'opacity-75 grayscale' : ''}">
+                      <div class="product-image mb-4 relative">
                         <img src="../assets/img/produtos.jpeg" alt="Poster Netflix" loading="lazy" class="w-full h-48 object-cover rounded-md" />
+                        ${isUnavailable ? '<div class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-md"><span class="bg-red-600 text-white px-3 py-1 text-xs font-bold uppercase rounded">Indisponível</span></div>' : ''}
                       </div>
                       <h3 class="text-lg font-medium text-gray-900">${product.name}</h3>
                       <p class="mt-1 text-sm text-gray-500">Licença: R$ ${Number(product.min_investment).toFixed(2)}</p>
@@ -131,10 +133,11 @@
 
                       <div class="mt-6">
                         <button
-                          class="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm invest-button"
+                          class="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors px-4 py-2 text-sm invest-button ${isUnavailable ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }"
                           type="button"
-                          onclick="openInvestModal('${product.id}', '${product.name}', ${product.min_investment})">
-                          Investir agora
+                          ${isUnavailable ? 'disabled' : `onclick="openInvestModal('${product.id}', '${product.name}', ${product.min_investment})"`}>
+                          ${isUnavailable ? 'Esgotado' : 'Investir agora'}
                         </button>
                       </div>
                     </div>

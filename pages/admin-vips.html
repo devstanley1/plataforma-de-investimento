@@ -67,10 +67,10 @@
                     <table class="min-w-full text-left text-sm text-gray-400">
                         <thead class="bg-black text-xs uppercase font-medium border-b border-zinc-800">
                             <tr>
-                                <th class="px-6 py-3">Nível</th>
-                                <th class="px-6 py-3">Depósito Mín (R$)</th>
-                                <th class="px-6 py-3">Bônus Diário</th>
-                                <th class="px-6 py-3 text-right">Ações</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Nível</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Depósito Mín (R$)</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Bônus Diário</th>
+                                <th class="px-6 py-3 whitespace-nowrap text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="vips-body" class="divide-y divide-zinc-800">
@@ -116,10 +116,10 @@
 
             tbody.innerHTML = data.map(vip => `
           <tr class="hover:bg-zinc-800 transition-colors">
-            <td class="px-6 py-4 font-bold text-white">${vip.name}</td>
-            <td class="px-6 py-4">R$ ${Number(vip.min_deposit).toFixed(2)}</td>
-            <td class="px-6 py-4 text-green-400">${vip.daily_bonus_percent || 0}%</td>
-            <td class="px-6 py-4 text-right space-x-2">
+            <td class="px-6 py-4 whitespace-nowrap font-bold text-white">${vip.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap">R$ ${Number(vip.min_deposit).toFixed(2)}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-green-400">${vip.daily_bonus_percent || 0}%</td>
+            <td class="px-6 py-4 whitespace-nowrap text-right space-x-2">
               <button onclick="window.editVip('${vip.id}')" class="text-blue-400 hover:text-blue-300">Editar</button>
               <button onclick="window.deleteVip('${vip.id}')" class="text-red-500 hover:text-red-400">Excluir</button>
             </td>

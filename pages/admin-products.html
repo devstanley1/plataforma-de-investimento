@@ -56,7 +56,8 @@
                         <select id="prod-status"
                             class="mt-2 block w-full rounded-md border-zinc-700 bg-black text-white shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm p-3 border">
                             <option value="ACTIVE">Disponível (Ativo)</option>
-                            <option value="INACTIVE">Indisponível (Inativo)</option>
+                            <option value="UNAVAILABLE">Visível (Indisponível/Esgotado)</option>
+                            <option value="INACTIVE">Oculto (Inativo)</option>
                         </select>
                     </div>
 
@@ -82,12 +83,12 @@
                     <table class="min-w-full text-left text-sm text-gray-400">
                         <thead class="bg-black text-xs uppercase font-medium border-b border-zinc-800">
                             <tr>
-                                <th class="px-6 py-3">Nome</th>
-                                <th class="px-6 py-3">Retorno (%)</th>
-                                <th class="px-6 py-3">Mínimo (R$)</th>
-                                <th class="px-6 py-3">Duração</th>
-                                <th class="px-6 py-3">Status</th>
-                                <th class="px-6 py-3 text-right">Ações</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Nome</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Retorno (%)</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Mínimo (R$)</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Duração</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Status</th>
+                                <th class="px-6 py-3 whitespace-nowrap text-right">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="products-body" class="divide-y divide-zinc-800">
@@ -132,13 +133,17 @@
 
             tbody.innerHTML = data.map(prod => `
           <tr class="hover:bg-zinc-800 transition-colors">
-            <td class="px-6 py-4 font-bold text-white">${prod.name}</td>
-            <td class="px-6 py-4 text-green-400">${prod.nominal_rate}% / dia</td>
-            <td class="px-6 py-4">R$ ${Number(prod.min_investment).toFixed(2)}</td>
-            <td class="px-6 py-4">${prod.maturity_days} dias</td>
-            <td class="px-6 py-4">
-              <span class="px-2 py-1 text-xs rounded-full ${prod.status === 'ACTIVE' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}">
-                ${prod.status === 'ACTIVE' ? 'Ativo' : 'Inativo'}
+            <td class="px-6 py-4 whitespace-nowrap font-bold text-white">${prod.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-green-400">${prod.nominal_rate}% / dia</td>
+            <td class="px-6 py-4 whitespace-nowrap">R$ ${Number(prod.min_investment).toFixed(2)}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${prod.maturity_days} dias</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 text-xs rounded-full ${prod.status === 'ACTIVE' ? 'bg-green-900/30 text-green-400' :
+                    prod.status === 'UNAVAILABLE' ? 'bg-yellow-900/30 text-yellow-500' : 'bg-red-900/30 text-red-400'
+                }">
+                ${prod.status === 'ACTIVE' ? 'Ativo' :
+                    prod.status === 'UNAVAILABLE' ? 'Indisponível' : 'Oculto'
+                }
               </span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">

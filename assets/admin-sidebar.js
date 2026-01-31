@@ -83,24 +83,43 @@ document.addEventListener('DOMContentLoaded', () => {
     main.classList.add('md:ml-64', 'transition-all', 'duration-300');
   }
 
-  // Mobile toggle logic
+  // Backdrop logic
+  const backdrop = document.createElement('div');
+  backdrop.className = 'fixed inset-0 bg-black/50 z-20 hidden md:hidden glass-effect'; // Glass effect for premium feel
+  backdrop.id = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+
   const menuToggle = document.getElementById('menu-toggle');
   const sidebar = document.getElementById('admin-sidebar');
+  const menuIconPath = menuToggle ? menuToggle.querySelector('path') : null;
+
+  function toggleSidebar() {
+    const isClosed = sidebar.classList.contains('-translate-x-full');
+    if (isClosed) {
+      sidebar.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+      if (menuIconPath) menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // X icon
+    } else {
+      sidebar.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+      if (menuIconPath) menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Menu icon
+    }
+  }
 
   if (menuToggle && sidebar) {
-    menuToggle.addEventListener('click', () => {
-      if (sidebar.classList.contains('-translate-x-full')) {
-        sidebar.classList.remove('-translate-x-full');
-      } else {
-        sidebar.classList.add('-translate-x-full');
-      }
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebar();
     });
 
-    // Close on click outside (optional)
-    document.addEventListener('click', (e) => {
-      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && window.innerWidth < 768) {
-        sidebar.classList.add('-translate-x-full');
-      }
+    backdrop.addEventListener('click', toggleSidebar);
+
+    // Close on route change (optional, but good for SPA feel)
+    const links = sidebar.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) toggleSidebar();
+      });
     });
   }
 });

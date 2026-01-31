@@ -57,13 +57,13 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-zinc-800 transition-colors';
     tr.innerHTML = `
-      <td class="px-6 py-4 text-sm text-gray-400 font-mono">${req.id.slice(0, 8)}...</td>
-      <td class="px-6 py-4 text-sm text-gray-400">${req.user_id.slice(0, 8)}...</td>
-      <td class="px-6 py-4 text-sm text-gray-300">R$ ${Number(req.amount).toFixed(2)}</td>
-      <td class="px-6 py-4 text-sm text-red-400 font-medium">- R$ ${Number(req.tax_amount || 0).toFixed(2)}</td>
-      <td class="px-6 py-4 text-sm text-green-400 font-bold">R$ ${Number(req.net_amount || req.amount).toFixed(2)}</td>
-      <td class="px-6 py-4 text-sm text-gray-400">${req.pix_key}</td>
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">${req.id.slice(0, 8)}...</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${req.user_id.slice(0, 8)}...</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">R$ ${Number(req.amount).toFixed(2)}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-red-400 font-medium">- R$ ${Number(req.tax_amount || 0).toFixed(2)}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-bold">R$ ${Number(req.net_amount || req.amount).toFixed(2)}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${req.pix_key}</td>
+      <td class="px-6 py-4 whitespace-nowrap">
         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${req.status === 'PENDING' ? 'bg-yellow-900/30 text-yellow-400' :
         req.status === 'PAID' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'
       }">
@@ -74,7 +74,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
              ${req.vizzion_response.error || req.vizzion_response.message || 'Erro Detalhado'}
            </small></div>` : ''}
       </td>
-      <td class="px-6 py-4 text-sm font-medium space-x-2">
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
         ${req.status === 'PENDING' ? `
           <button onclick="aprovarSaque('${req.id}')" class="text-green-500 hover:text-green-400">Aprovar</button>
           <button onclick="reprovarSaque('${req.id}')" class="text-red-500 hover:text-red-400">Reprovar</button>
