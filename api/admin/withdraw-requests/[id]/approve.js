@@ -57,8 +57,7 @@ async function processWithdraw(id) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-public-key': publicKey,
-        'x-secret-key': secretKey
+        'Authorization': `Basic ${Buffer.from(`${publicKey}:${secretKey}`).toString('base64')}`
       },
       body: JSON.stringify(payload)
     });
