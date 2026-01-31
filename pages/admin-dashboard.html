@@ -59,8 +59,22 @@
         <div class="p-6 border-b border-zinc-800">
           <h3 class="text-lg font-semibold text-white">Atividades Recentes</h3>
         </div>
-        <div class="p-6 text-center text-gray-500 text-sm">
-          Nenhuma atividade recente encontrada.
+        <div class="p-6 overflow-x-auto">
+          <table class="min-w-full text-left text-sm text-gray-400">
+            <thead class="border-b border-zinc-800 text-xs uppercase font-medium">
+              <tr>
+                <th class="px-4 py-2">Tipo</th>
+                <th class="px-4 py-2">Usuário</th>
+                <th class="px-4 py-2">Valor</th>
+                <th class="px-4 py-2">Data</th>
+              </tr>
+            </thead>
+            <tbody id="recent-activities-body">
+              <tr>
+                <td colspan="4" class="px-4 py-4 text-center">Carregando atividades...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -69,11 +83,87 @@
   <script src="../assets/admin-sidebar.js"></script>
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    // Configuração básica para buscar stats (mock ou real se tiver endpoints)
-    // Por enquanto, apenas o esqueleto visual.
-    document.getElementById('stat-users').innerText = '1,234'; // Mock
-    document.getElementById('stat-deposits').innerText = 'R$ 12.500'; // Mock
-    document.getElementById('stat-withdraws').innerText = '5'; // Mock
+
+    const SUPABASE_URL = 'https://hnbwamaqdmfdwaqtyxkc.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuYndhbWFxZG1mZHdhcXR5eGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMTYxMTIsImV4cCI6MjA4NDg5MjExMn0.cOKmgk3KtuvpP2UQWUiDOwp_AC9T__EAnFODTtn95zs';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function fetchDashboardData() {
+      try {
+        // 1. Total Usuários
+        const { count: usersCount, error: usersError } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true });
+
+        if (!usersError) {
+          document.getElementById('stat-users').innerText = usersCount || 0;
+        }
+
+        // 2. Depósitos Hoje
+        const today = new Date().toISOString().split('T')[0];
+        const startOfDay = `${today}T00:00:00.000Z`;
+        const endOfDay = `${today}T23:59:59.999Z`;
+
+        const { data: payments, error: paymentsError } = await supabase
+          .from('payments')
+          .select('amount, status')
+          .gte('created_at', startOfDay)
+          .lte('created_at', endOfDay)
+          .in('status', ['PAID', 'COMPLETED', 'paid', 'completed']);
+
+        if (!paymentsError && payments) {
+          const totalDeposits = payments.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
+          document.getElementById('stat-deposits').innerText = `R$ ${totalDeposits.toFixed(2)}`;
+        }
+
+        // 3. Saques Pendentes
+        const { count: withdrawsCount, error: withdrawsError } = await supabase
+          .from('withdraw_requests')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
+
+        if (!withdrawsError) {
+          document.getElementById('stat-withdraws').innerText = withdrawsCount || 0;
+        }
+
+        // 4. Atividades Recentes
+        const { data: recentDeposits } = await supabase
+          .from('payments')
+          .select('id, amount, created_at, user_id, status')
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        const { data: recentWithdraws } = await supabase
+          .from('withdraw_requests')
+          .select('id, amount, created_at, user_id, status')
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        const activities = [
+          ...(recentDeposits || []).map(d => ({ ...d, type: 'Depósito', color: 'text-green-500' })),
+          ...(recentWithdraws || []).map(w => ({ ...w, type: 'Saque', color: 'text-red-500' }))
+        ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
+
+        const tbody = document.getElementById('recent-activities-body');
+        if (activities.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="px-4 py-4 text-center">Nenhuma atividade recente.</td></tr>`;
+        } else {
+          tbody.innerHTML = activities.map(item => `
+            <tr class="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors">
+              <td class="px-4 py-3 font-medium ${item.color}">${item.type}</td>
+              <td class="px-4 py-3 font-mono text-gray-300">${item.user_id ? item.user_id.slice(0, 8) + '...' : 'Anônimo'}</td>
+              <td class="px-4 py-3 font-bold text-white">R$ ${Number(item.amount).toFixed(2)}</td>
+              <td class="px-4 py-3 text-gray-500">${new Date(item.created_at).toLocaleTimeString()}</td>
+            </tr>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error('Erro ao carregar dashboard:', err);
+      }
+    }
+
+    fetchDashboardData();
   </script>
 </body>
 
