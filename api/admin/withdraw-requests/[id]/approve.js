@@ -13,14 +13,15 @@ async function processWithdraw(id) {
     return { error: error?.message || 'Solicitação não encontrada.' };
   }
 
-  // Buscar perfil do usuário solicitante para obter o nome real
+  // Buscar perfil do usuário solicitante para obter nome e telefone
   const { data: userProfile } = await supabase
     .from('profiles')
-    .select('name')
+    .select('name, phone')
     .eq('id', req.user_id)
     .single();
 
   const clientName = userProfile?.name || 'Investidor';
+  const clientPhone = userProfile?.phone || '00000000000';
 
   // LOG: dados da solicitação
   console.log('[VIZZION][APROVACAO] Saque aprovado:', { id, req });
@@ -28,15 +29,24 @@ async function processWithdraw(id) {
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/pix/send';
+  // Retornando para o endpoint que respondia (mesmo que com erro), pois 'send' deu 404.
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
+
   const payload = {
-    identifier: `${req.id}-${Date.now()}`, // Garantir unicidade para retentativas
-    amount: Number(req.amount), // Garantir que seja número
+    identifier: `${req.id}-${Date.now()}`,
+    amount: Number(req.amount),
     document: req.document,
     cpf: req.document,
     pixKey: req.pix_key,
-    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(), // Normalizar para minúsculo (cpf, email, phone, random)
-    client: { name: clientName, cpf: req.document, document: req.document, documentType: 'CPF' },
+    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(),
+    client: {
+      name: clientName,
+      cpf: req.document,
+      document: req.document,
+      documentType: 'CPF',
+      phone: clientPhone,
+      email: 'exemplo@email.com' // Adicionando email caso seja obrigatório (pode ser ajustado para pegar do auth)
+    },
     metadata: { source: 'admin', original_id: req.id }
   };
   let vizzion_response = null;
