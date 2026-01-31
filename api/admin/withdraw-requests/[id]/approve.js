@@ -31,6 +31,24 @@ async function processWithdraw(id) {
   const secretKey = process.env.VIZZION_SECRET_KEY;
   const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://api.vizzionpay.com/v1/pix/payout';
 
+  // Verificar se as credenciais estão configuradas
+  if (!publicKey || !secretKey) {
+    console.error('[VIZZION][APROVACAO][ERRO] Credenciais não configuradas');
+    vizzion_response = {
+      error: 'Credenciais Vizzion não configuradas. Configure VIZZION_PUBLIC_KEY e VIZZION_SECRET_KEY no Vercel.',
+      status: 'MANUAL_APPROVAL_REQUIRED'
+    };
+    status = 'PAID'; // Aprovar manualmente se não houver credenciais
+
+    // Atualizar banco
+    await supabase
+      .from('withdraw_requests')
+      .update({ status, vizzion_response })
+      .eq('id', id);
+
+    return { ok: true, status, vizzion_response, warning: 'Aprovado manualmente - Vizzion não configurada' };
+  }
+
   // Usar o valor líquido se existir, senão o valor bruto (compatibilidade retroativa)
   const finalAmount = req.net_amount ? Number(req.net_amount) : Number(req.amount);
 
@@ -47,7 +65,13 @@ async function processWithdraw(id) {
   let vizzion_response = null;
   let status = 'PAID';
   try {
-    console.log('[VIZZION][APROVACAO] Enviando para VizzionPay:', { payoutUrl, publicKey, payload });
+    console.log('[VIZZION][APROVACAO] Enviando para VizzionPay:', {
+      payoutUrl,
+      publicKey: publicKey ? `${publicKey.substring(0, 10)}...` : 'MISSING',
+      secretKey: secretKey ? 'CONFIGURED' : 'MISSING',
+      payload
+    });
+
     const response = await fetch(payoutUrl, {
       method: 'POST',
       headers: {
@@ -60,15 +84,19 @@ async function processWithdraw(id) {
       },
       body: JSON.stringify(payload)
     });
+
     let responseText = await response.text();
+    console.log('[VIZZION][APROVACAO] Response Status:', response.status, response.statusText);
+    console.log('[VIZZION][APROVACAO] Response Text:', responseText);
+
     try {
       vizzion_response = JSON.parse(responseText);
     } catch (parseErr) {
       vizzion_response = {
         raw: responseText,
-        parseError: parseErr.message,
         httpStatus: response.status,
-        httpStatusText: response.statusText
+        httpStatusText: response.statusText,
+        parseError: parseErr.message
       };
       console.error('[VIZZION][APROVACAO] Resposta não-JSON da VizzionPay:', {
         responseText,
@@ -80,8 +108,17 @@ async function processWithdraw(id) {
     if (!response.ok) status = 'FAILED';
   } catch (e) {
     status = 'FAILED';
-    vizzion_response = { error: e.message };
-    console.error('[VIZZION][APROVACAO] Erro ao enviar para VizzionPay:', e);
+    vizzion_response = {
+      error: e.message,
+      errorType: e.name,
+      errorStack: e.stack,
+      timestamp: new Date().toISOString()
+    };
+    console.error('[VIZZION][APROVACAO] Erro ao enviar para VizzionPay:', {
+      error: e.message,
+      type: e.name,
+      stack: e.stack
+    });
   }
   try {
     const { error: updateError } = await supabase
