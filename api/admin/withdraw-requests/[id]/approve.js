@@ -56,8 +56,17 @@ async function processWithdraw(id) {
     try {
       vizzion_response = JSON.parse(responseText);
     } catch (parseErr) {
-      vizzion_response = { raw: responseText, parseError: parseErr.message };
-      console.error('[VIZZION][APROVACAO] Resposta não-JSON da VizzionPay:', responseText);
+      vizzion_response = {
+        raw: responseText,
+        parseError: parseErr.message,
+        httpStatus: response.status,
+        httpStatusText: response.statusText
+      };
+      console.error('[VIZZION][APROVACAO] Resposta não-JSON da VizzionPay:', {
+        responseText,
+        status: response.status,
+        statusText: response.statusText
+      });
     }
     console.log('[VIZZION][APROVACAO] Resposta VizzionPay:', vizzion_response);
     if (!response.ok) status = 'FAILED';
