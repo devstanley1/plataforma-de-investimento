@@ -30,7 +30,7 @@ async function processWithdraw(id) {
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
   // Retornando para o endpoint que respondia (mesmo que com erro), pois 'send' deu 404.
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/pix/cashout';
 
   const payload = {
     identifier: `${req.id}-${Date.now()}`,
