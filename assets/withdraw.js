@@ -38,15 +38,43 @@ document.addEventListener('DOMContentLoaded', () => {
     successEl.style.display = message ? 'block' : 'none';
   };
 
+  // Variável para armazenar taxa (percentual 0-100)
+  let withdrawTaxPercent = 7.0; // Padrão backup
+
+  // Função para buscar configurações do sistema
+  async function fetchSystemConfig() {
+    try {
+      const supabase = await getSupabaseClient();
+      const { data, error } = await supabase
+        .from('system_config')
+        .select('value')
+        .eq('key', 'withdraw_tax_percent')
+        .single();
+
+      if (!error && data) {
+        withdrawTaxPercent = parseFloat(data.value);
+        updateSummary(); // Atualiza UI com nova taxa
+      }
+    } catch (err) {
+      console.warn('Usando taxa padrão:', err);
+    }
+  }
+
   const updateSummary = () => {
     const rawValue = Number(amountInput?.value || 0);
     const amount = Number.isFinite(rawValue) && rawValue > 0 ? rawValue : 0;
-    const fee = amount * 0.07;
+
+    // Calcular taxa baseada no config (ex: 5.0 vira 0.05)
+    const fee = amount * (withdrawTaxPercent / 100);
     const net = amount - fee;
+
     if (amountEl) amountEl.textContent = formatCurrency(amount);
-    if (feeEl) feeEl.textContent = formatCurrency(fee);
+    if (feeEl) feeEl.innerHTML = `${formatCurrency(fee)} <small class="text-gray-400">(${withdrawTaxPercent}%)</small>`;
     if (netEl) netEl.textContent = formatCurrency(net);
   };
+
+  // Iniciar busca de config
+  fetchSystemConfig();
 
   cpfInput.addEventListener('blur', () => {
     if (!cpfInput.value) return;
@@ -54,7 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   amountInput?.addEventListener('input', updateSummary);
-  updateSummary();
+  // updateSummary(); -> Removido pois o fetchSystemConfig já chama
+
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
