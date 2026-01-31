@@ -30,14 +30,14 @@ async function processWithdraw(id) {
   const secretKey = process.env.VIZZION_SECRET_KEY;
   const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
   const payload = {
-    identifier: req.id,
-    amount: req.amount,
+    identifier: `${req.id}-${Date.now()}`, // Garantir unicidade para retentativas
+    amount: Number(req.amount), // Garantir que seja número
     document: req.document,
     cpf: req.document,
     pixKey: req.pix_key,
-    pixKeyType: req.pix_key_type,
+    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(), // Normalizar para minúsculo (cpf, email, phone, random)
     client: { name: clientName, cpf: req.document, document: req.document, documentType: 'CPF' },
-    metadata: { source: 'admin' }
+    metadata: { source: 'admin', original_id: req.id }
   };
   let vizzion_response = null;
   let status = 'PAID';
