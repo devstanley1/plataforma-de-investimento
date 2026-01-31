@@ -29,8 +29,8 @@ async function processWithdraw(id) {
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  // Retornando para o endpoint que respondia (mesmo que com erro), pois 'send' deu 404.
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/pix/payout';
+  // Retornando para o endpoint que respondia (mesmo que com erro 401), pois outros dão 404.
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
 
   const payload = {
     identifier: `${req.id}-${Date.now()}`,
@@ -57,7 +57,11 @@ async function processWithdraw(id) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${Buffer.from(`${publicKey}:${secretKey}`).toString('base64')}`
+        // Tentativa 3: Bearer Token usando a Secret Key (alguns gateways usam isso)
+        'Authorization': `Bearer ${secretKey}`,
+        // Mantendo as chaves antigas por compatibilidade, caso usem ambas
+        'x-public-key': publicKey,
+        'x-secret-key': secretKey
       },
       body: JSON.stringify(payload)
     });
