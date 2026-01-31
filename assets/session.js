@@ -8,12 +8,18 @@ async function getSupabaseClient() {
 
 async function loadSession() {
   const supabase = await getSupabaseClient();
-  const { data: sessionData } = await supabase.auth.getSession();
+
+  // Use refreshSession instead of getSession to get fresh token
+  const { data: sessionData, error: sessionError } = await supabase.auth.refreshSession();
   const session = sessionData?.session;
 
-  if (!session) {
-    window.location.href = 'login.html';
-    return;
+  if (sessionError || !session) {
+    // Fallback to getSession if refresh fails
+    const { data: fallbackData } = await supabase.auth.getSession();
+    if (!fallbackData?.session) {
+      window.location.href = 'login.html';
+      return;
+    }
   }
 
   try {
@@ -39,10 +45,25 @@ async function loadSession() {
     document.querySelectorAll('.auth-only').forEach((el) => {
       el.classList.remove('auth-only');
     });
+
+    // Setup periodic refresh every 5 minutes
+    setupPeriodicRefresh(supabase, data.user.id);
   } catch (e) {
     await supabase.auth.signOut();
     window.location.href = 'login.html';
   }
+}
+
+// Periodic session and balance refresh
+function setupPeriodicRefresh(supabase, userId) {
+  setInterval(async () => {
+    try {
+      await supabase.auth.refreshSession();
+      await syncWalletBalance(supabase, userId);
+    } catch (e) {
+      console.error('Refresh failed:', e);
+    }
+  }, 5 * 60 * 1000); // Every 5 minutes
 }
 
 async function syncWalletBalance(supabase, userId) {
@@ -53,11 +74,24 @@ async function syncWalletBalance(supabase, userId) {
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (error) return;
+    if (error) {
+      console.error('Error fetching balance:', error);
+      return;
+    }
 
     const balance = Number(data?.balance || 0);
     localStorage.setItem('userBalance', String(balance));
-  } catch {
+
+    // Update balance display if element exists
+    const balanceEl = document.getElementById('user-balance');
+    if (balanceEl) {
+      balanceEl.textContent = `R$ ${balance.toFixed(2)}`;
+    }
+
+    // Dispatch event for other components that need balance updates
+    window.dispatchEvent(new CustomEvent('balanceUpdated', { detail: { balance } }));
+  } catch (e) {
+    console.error('Balance sync error:', e);
     return;
   }
 }
