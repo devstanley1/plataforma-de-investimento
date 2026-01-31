@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const { data, error } = await supabase
     .from('withdraw_requests')
     .select('*')
-    .eq('status', 'PENDING')
+    .in('status', ['PENDING', 'FAILED'])
     .order('created_at', { ascending: true });
   if (error) {
     return sendJson(res, 500, { error: error.message });

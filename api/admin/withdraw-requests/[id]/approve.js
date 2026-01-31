@@ -13,6 +13,15 @@ async function processWithdraw(id) {
     return { error: error?.message || 'Solicitação não encontrada.' };
   }
 
+  // Buscar perfil do usuário solicitante para obter o nome real
+  const { data: userProfile } = await supabase
+    .from('profiles')
+    .select('name')
+    .eq('id', req.user_id)
+    .single();
+
+  const clientName = userProfile?.name || 'Investidor';
+
   // LOG: dados da solicitação
   console.log('[VIZZION][APROVACAO] Saque aprovado:', { id, req });
 
@@ -27,7 +36,7 @@ async function processWithdraw(id) {
     cpf: req.document,
     pixKey: req.pix_key,
     pixKeyType: req.pix_key_type,
-    client: { name: 'Investidor', cpf: req.document, document: req.document, documentType: 'CPF' },
+    client: { name: clientName, cpf: req.document, document: req.document, documentType: 'CPF' },
     metadata: { source: 'admin' }
   };
   let vizzion_response = null;

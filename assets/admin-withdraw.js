@@ -60,7 +60,13 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
       <td>${req.user_id}</td>
       <td>R$ ${Number(req.amount).toFixed(2)}</td>
       <td>${req.pix_key}</td>
-      <td>${req.status}</td>
+      <td>
+        ${req.status}
+        ${req.status === 'FAILED' && req.vizzion_response ?
+        `<br><small style="color:red; cursor:pointer;" title="${JSON.stringify(req.vizzion_response).replace(/"/g, "'")}">
+             ${req.vizzion_response.error || req.vizzion_response.message || 'Ver erro'}
+           </small>` : ''}
+      </td>
       <td class="actions">
         <button onclick="aprovarSaque('${req.id}')">Aprovar</button>
         <button onclick="reprovarSaque('${req.id}')">Reprovar</button>
@@ -70,7 +76,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
   });
 })();
 
-window.aprovarSaque = async function(id) {
+window.aprovarSaque = async function (id) {
   if (!confirm('Deseja aprovar este saque?')) return;
   const sessionStr = localStorage.getItem('session');
   let access_token = null;
@@ -88,7 +94,7 @@ window.aprovarSaque = async function(id) {
   });
   location.reload();
 };
-window.reprovarSaque = async function(id) {
+window.reprovarSaque = async function (id) {
   const motivo = prompt('Motivo da reprovação:');
   if (!motivo) return;
   const sessionStr = localStorage.getItem('session');
