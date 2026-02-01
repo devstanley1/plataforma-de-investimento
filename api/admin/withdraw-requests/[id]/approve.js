@@ -29,7 +29,10 @@ async function processWithdraw(id) {
   // Aprovar: enviar para VizzionPay
   const publicKey = process.env.VIZZION_PUBLIC_KEY;
   const secretKey = process.env.VIZZION_SECRET_KEY;
-  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://api.vizzionpay.com/v1/pix/payout';
+  const callbackUrl = process.env.VIZZION_WEBHOOK_URL || 'https://netflix-investimento.vercel.app/api/vizzion/webhook';
+
+  // URL CORRETA conforme documentação oficial
+  const payoutUrl = process.env.VIZZION_PAYOUT_URL || 'https://app.vizzionpay.com/api/v1/gateway/transfers';
 
   // Verificar se as credenciais estão configuradas
   if (!publicKey || !secretKey) {
@@ -52,16 +55,26 @@ async function processWithdraw(id) {
   // Usar o valor líquido se existir, senão o valor bruto (compatibilidade retroativa)
   const finalAmount = req.net_amount ? Number(req.net_amount) : Number(req.amount);
 
+  // Payload conforme documentação oficial da Vizzion
   const payload = {
-    identifier: `${req.id}-${Date.now()}`, // Garantir unicidade para retentativas
+    identifier: `${req.id}-${Date.now()}`,
+    callbackUrl: callbackUrl,
     amount: finalAmount,
-    document: req.document,
-    cpf: req.document,
-    pixKey: req.pix_key,
-    pixKeyType: (req.pix_key_type || 'CPF').toLowerCase(), // Normalizar para minúsculo (cpf, email, phone, random)
-    client: { name: clientName, cpf: req.document, document: req.document, documentType: 'CPF' },
-    metadata: { source: 'admin', original_id: req.id, gross_amount: req.amount }
+    discountFeeOfReceiver: false, // Você paga a taxa, não o recebedor
+    pix: {
+      type: (req.pix_key_type || 'cpf').toLowerCase(), // cpf, cnpj, phone, email, random
+      key: req.pix_key
+    },
+    owner: {
+      ip: '192.168.1.1', // IP do usuário (pode ser fixo ou dinâmico)
+      name: clientName.normalize('NFD').replace(/[\u0300-\u036f]/g, ''), // Remove acentos
+      document: {
+        type: req.document.length === 11 ? 'cpf' : 'cnpj',
+        number: req.document
+      }
+    }
   };
+
   let vizzion_response = null;
   let status = 'PAID';
   try {
@@ -72,40 +85,61 @@ async function processWithdraw(id) {
       payload
     });
 
-    // Usar Basic Auth (padrão para gateways brasileiros)
-    const basicAuth = Buffer.from(`${publicKey}:${secretKey}`).toString('base64');
-
-    const response = await fetch(payoutUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Basic ${basicAuth}`
-      },
-      body: JSON.stringify(payload)
-    });
-
-    let responseText = await response.text();
-    console.log('[VIZZION][APROVACAO] Response Status:', response.status, response.statusText);
-    console.log('[VIZZION][APROVACAO] Response Text:', responseText);
+    // Adicionar timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 segundos
 
     try {
-      vizzion_response = JSON.parse(responseText);
-    } catch (parseErr) {
-      vizzion_response = {
-        raw: responseText,
-        httpStatus: response.status,
-        httpStatusText: response.statusText,
-        parseError: parseErr.message
-      };
-      console.error('[VIZZION][APROVACAO] Resposta não-JSON da VizzionPay:', {
-        responseText,
-        status: response.status,
-        statusText: response.statusText
+      const response = await fetch(payoutUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          // Headers corretos conforme documentação
+          'x-public-key': publicKey,
+          'x-secret-key': secretKey
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
+
+      let responseText = await response.text();
+      console.log('[VIZZION][APROVACAO] Response Status:', response.status, response.statusText);
+      console.log('[VIZZION][APROVACAO] Response Text:', responseText);
+
+      try {
+        vizzion_response = JSON.parse(responseText);
+      } catch (parseErr) {
+        vizzion_response = {
+          raw: responseText,
+          httpStatus: response.status,
+          httpStatusText: response.statusText,
+          parseError: parseErr.message
+        };
+        console.error('[VIZZION][APROVACAO] Resposta não-JSON da VizzionPay:', {
+          responseText,
+          status: response.status,
+          statusText: response.statusText
+        });
+      }
+      console.log('[VIZZION][APROVACAO] Resposta VizzionPay:', vizzion_response);
+
+      // Verificar status do withdraw na resposta
+      if (vizzion_response?.withdraw?.status === 'COMPLETED') {
+        status = 'PAID';
+      } else if (vizzion_response?.withdraw?.status === 'CANCELED') {
+        status = 'FAILED';
+      } else if (vizzion_response?.withdraw?.status === 'PENDING' || vizzion_response?.withdraw?.status === 'PROCESSING') {
+        status = 'PROCESSING';
+      } else if (!response.ok) {
+        status = 'FAILED';
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      throw fetchError;
     }
-    console.log('[VIZZION][APROVACAO] Resposta VizzionPay:', vizzion_response);
-    if (!response.ok) status = 'FAILED';
   } catch (e) {
     status = 'FAILED';
     vizzion_response = {
