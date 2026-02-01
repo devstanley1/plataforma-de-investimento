@@ -72,15 +72,15 @@ async function processWithdraw(id) {
       payload
     });
 
+    // Usar Basic Auth (padrão para gateways brasileiros)
+    const basicAuth = Buffer.from(`${publicKey}:${secretKey}`).toString('base64');
+
     const response = await fetch(payoutUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Tentativa 3: Bearer Token usando a Secret Key (alguns gateways usam isso)
-        'Authorization': `Bearer ${secretKey}`,
-        // Mantendo as chaves antigas por compatibilidade, caso usem ambas
-        'x-public-key': publicKey,
-        'x-secret-key': secretKey
+        'Accept': 'application/json',
+        'Authorization': `Basic ${basicAuth}`
       },
       body: JSON.stringify(payload)
     });

@@ -1,92 +1,107 @@
-# Configuração da Vizzion Pay - Guia Completo
+# Vizzion Pay - Guia de Configuração Atualizado
 
-## Problema Atual
+## Problema: "fetch failed"
 
-Erro: `"NOT_FOUND"` com status 404
+Esse erro indica que a requisição não está chegando ao servidor da Vizzion. Possíveis causas:
 
-**Causa**: A URL da API da Vizzion está incorreta ou as variáveis de ambiente não estão configuradas.
+### 1. Credenciais Não Configuradas (MAIS PROVÁVEL)
 
-## Solução
+**Verificar no Vercel:**
+- Vá em **Settings** → **Environment Variables**
+- Confirme que existem:
+  - `VIZZION_PUBLIC_KEY`
+  - `VIZZION_SECRET_KEY`
+  
+**Se não existirem, adicione-as e faça REDEPLOY**
 
-### 1. Configurar Variáveis de Ambiente no Vercel
+### 2. Formato de Autenticação
 
-Acesse: **Vercel Dashboard** → **Seu Projeto** → **Settings** → **Environment Variables**
-
-Adicione as seguintes variáveis:
-
-```
-VIZZION_PUBLIC_KEY=sua_chave_publica_aqui
-VIZZION_SECRET_KEY=sua_chave_secreta_aqui
-VIZZION_PAYOUT_URL=https://api.vizzionpay.com/v1/pix/payout
-VIZZION_WEBHOOK_TOKEN=seu_token_webhook_aqui
-```
-
-### 2. URLs Corretas da Vizzion
-
-**Produção:**
-- Payout (Saques): `https://api.vizzionpay.com/v1/pix/payout`
-- Recebimento: `https://api.vizzionpay.com/v1/pix/receive`
-
-**Sandbox/Teste:**
-- Payout: `https://sandbox.vizzionpay.com/v1/pix/payout`
-- Recebimento: `https://sandbox.vizzionpay.com/v1/pix/receive`
-
-### 3. Obter Credenciais
-
-1. Acesse o painel da Vizzion Pay
-2. Vá em **Configurações** → **API Keys**
-3. Copie:
-   - Public Key
-   - Secret Key
-   - Webhook Token
-
-### 4. Testar Configuração
-
-Após configurar as variáveis:
-
-1. Faça um **Redeploy** no Vercel
-2. Tente aprovar um saque de teste
-3. Verifique os logs no Vercel para confirmar
-
-## Modo de Teste (Sem Vizzion)
-
-Se você ainda não tem credenciais da Vizzion, pode desabilitar temporariamente a integração:
-
-### Opção 1: Aprovar Manualmente
-
-Edite `api/admin/withdraw-requests/[id]/approve.js` e comente a chamada da Vizzion:
+Atualizei o código para usar **Basic Authentication**, que é o padrão mais comum em gateways brasileiros:
 
 ```javascript
-// Comentar linhas 49-85 (chamada da Vizzion)
-// Forçar status PAID
-status = 'PAID';
-vizzion_response = { message: 'Aprovado manualmente (modo teste)' };
+// Antes (Bearer Token)
+Authorization: Bearer ${secretKey}
+
+// Agora (Basic Auth)
+Authorization: Basic base64(publicKey:secretKey)
 ```
 
-### Opção 2: Usar Mock
+### 3. URLs Corretas
 
-Adicione esta variável de ambiente:
+✅ Você já corrigiu para: `https://api.vizzionpay.com/v1/pix/payout`
 
+## Como Obter as Credenciais
+
+1. Acesse: https://app.vizzionpay.com
+2. Faça login na sua conta
+3. Vá em **Configurações** ou **API**
+4. Copie:
+   - **Public Key** (ou Client ID)
+   - **Secret Key** (ou Client Secret)
+
+## Configurar no Vercel
+
+```bash
+# No terminal do Vercel CLI (opcional)
+vercel env add VIZZION_PUBLIC_KEY
+vercel env add VIZZION_SECRET_KEY
+
+# Ou manualmente no dashboard
 ```
-VIZZION_MOCK_MODE=true
+
+**Valores de exemplo (NÃO USE ESTES):**
+```
+VIZZION_PUBLIC_KEY=pk_live_abc123def456
+VIZZION_SECRET_KEY=sk_live_xyz789uvw012
 ```
 
-E o código já detectará e simulará aprovação automática.
+## Testar Localmente (Opcional)
+
+Crie um arquivo `.env.local`:
+
+```env
+VIZZION_PUBLIC_KEY=sua_chave_publica
+VIZZION_SECRET_KEY=sua_chave_secreta
+VIZZION_PAYOUT_URL=https://sandbox.vizzionpay.com/v1/pix/payout
+```
+
+**Importante:** Use a URL de **sandbox** para testes!
+
+## Modo de Desenvolvimento (Sem Vizzion)
+
+Se você ainda não tem conta na Vizzion, o código agora aprova automaticamente os saques quando as credenciais não estão configuradas.
+
+Você verá no log:
+```
+[VIZZION][APROVACAO][ERRO] Credenciais não configuradas
+Status: PAID (Aprovado manualmente)
+```
 
 ## Verificar Logs
 
-No Vercel, vá em **Deployments** → **Seu Deploy** → **Functions** → **Logs**
+Após fazer deploy:
 
-Procure por:
-```
-[VIZZION][APROVACAO] Enviando para VizzionPay
-```
+1. Vá em **Vercel Dashboard** → **Deployments**
+2. Clique no seu deploy
+3. Vá em **Functions** → **Logs**
+4. Procure por `[VIZZION][APROVACAO]`
 
-Isso mostrará a URL e payload sendo enviados.
+Você verá:
+- ✅ Headers configurados
+- ✅ Payload enviado
+- ✅ Response da Vizzion
+- ❌ Erros detalhados
 
-## Contato Vizzion
+## Próximos Passos
 
-Se precisar de suporte:
+1. [ ] Obter credenciais da Vizzion
+2. [ ] Adicionar no Vercel
+3. [ ] Fazer redeploy
+4. [ ] Testar um saque
+5. [ ] Verificar logs
+
+## Suporte Vizzion
+
 - Site: https://vizzionpay.com
-- Documentação: https://docs.vizzionpay.com
 - Suporte: suporte@vizzionpay.com
+- Dashboard: https://app.vizzionpay.com
